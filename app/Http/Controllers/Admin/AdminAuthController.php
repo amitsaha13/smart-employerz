@@ -28,7 +28,7 @@ class AdminAuthController extends Controller
 
     protected function register(Request $request)
     {
-        //  return $request->all();
+        
         $admin = new Admin();
         $admin->name = $request['name'];
         $admin->email = $request['email'];
