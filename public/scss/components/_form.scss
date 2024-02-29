@@ -1,0 +1,492 @@
+form {
+  &.create-new-job-form {
+    max-width: 640px;
+
+    .form-group {
+      .form-title {
+        padding-bottom: 16px;
+
+        h2 {
+          color: #101828;
+          font-family: $inter;
+          font-size: 18px;
+          font-weight: 500;
+          line-height: 28px;
+          margin-bottom: 0;
+        }
+
+        p {
+          color: #667085;
+          font-family: $inter;
+          font-size: $fontSmall;
+          font-weight: $normal;
+          line-height: 28px;
+          margin-bottom: 0;
+        }
+      }
+
+      textarea {
+        height: 128px;
+        padding-top: 10px !important;
+        font-family: $inter;
+        font-size: $fontNormal;
+        font-weight: $normal;
+        line-height: 24px;
+        color: $dark2;
+      }
+
+      button {
+        gap: 8px;
+      }
+    }
+
+    .title-bar {
+      color: #101828;
+      font-family: $inter;
+      font-size: 16px;
+      font-weight: 500;
+      line-height: 28px;
+      margin-bottom: 0;
+      border-radius: 4px;
+      background: #f2f2f2;
+      padding: 7px 0 6px 24px;
+
+      @media (max-width: 575.98px) {
+        padding-left: 10px;
+      }
+    }
+
+    .title-bar-with-btn {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 8px;
+
+      h3 {
+        flex-grow: 1;
+      }
+
+      button {
+        display: flex;
+        align-items: center;
+        padding: 9px 8px;
+        border-radius: 4px;
+        border: 1px solid $teal;
+        background: $teal;
+        box-shadow: 0px 1px 2px 0px rgba(16, 24, 40, 0.05);
+        gap: 8px;
+        color: $white;
+        font-family: $inter;
+        font-size: $fontSmall;
+        font-weight: 600;
+        transition: $transitionNormal;
+
+        &:hover {
+          background: #fff;
+          color: $teal;
+        }
+      }
+    }
+
+    .title-bar-with-switch {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 8px;
+
+      h3 {
+        flex-basis: 80%;
+      }
+
+      .form-switch {
+        flex-basis: 20%;
+        padding: 0;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 16px;
+
+        .form-check-input {
+          margin-left: 0;
+        }
+      }
+    }
+
+    a {
+      &.custom-links {
+        color: $teal;
+        font-family: $inter;
+        font-size: $fontSmall;
+        font-weight: 600;
+        position: relative;
+        display: inline-block;
+        top: 11px;
+
+        @media (max-width: 459.98px) {
+          display: block;
+          top: 0;
+          padding-bottom: 20px;
+          text-align: right;
+        }
+      }
+    }
+
+    button {
+      &.btn-form {
+        @include btn-theme;
+        float: right;
+
+        @media (max-width: 575.98px) {
+          padding: 12px;
+        }
+
+        &.btn-default {
+          background-color: $white;
+          color: $gray;
+          border-color: $gray2;
+
+          &:hover {
+            color: $teal;
+            border-color: $teal;
+          }
+        }
+
+        &.btn-form-continue {
+          margin-right: 23px;
+
+          @media (max-width: 767.98px) {
+            margin-right: 0;
+          }
+        }
+      }
+    }
+  }
+
+  .form-group {
+    margin-bottom: 1.5rem;
+
+    .form-check {
+      label {
+        margin-bottom: 0;
+        color: #344054;
+        font-family: $inter;
+        font-size: 14px;
+        font-weight: 500;
+        line-height: 20px;
+        margin-top: 3px;
+
+        a {
+          color: #00756a;
+          text-decoration-line: underline;
+        }
+      }
+
+      .form-check-input {
+        &:focus {
+          box-shadow: none;
+        }
+
+        &:checked {
+          background-color: $teal;
+          border-color: $teal;
+        }
+      }
+    }
+
+    label {
+      color: $gray;
+      font-family: $inter;
+      font-size: $fontSmall;
+      font-weight: 500;
+      line-height: 20px;
+      margin-bottom: 0.5rem;
+    }
+
+    input[type="text"],
+    input[type="email"],
+    input[type="number"],
+    input[type="password"],
+    textarea {
+      background: $white;
+      padding: 1rem;
+      border: 1px solid $gray2;
+      box-shadow: 0px 2px 1px 0px rgba(16, 24, 40, 0.05);
+      height: 44px;
+      border-radius: $radiusSmall;
+      transition: $transitionNormal;
+      width: 100%;
+
+      &:focus {
+        border-color: $teal;
+      }
+    }
+
+    .form-text {
+      color: $gray1;
+      font-family: $inter;
+      font-size: $fontSmall;
+      font-weight: $normal;
+      line-height: 20px;
+    }
+
+    .form-select {
+      padding: 0 1rem;
+      border: 1px solid $gray2;
+      box-shadow: 0px 2px 1px 0px rgba(16, 24, 40, 0.05);
+      height: 44px;
+      border-radius: $radiusSmall;
+      color: $gray1;
+      font-family: $inter;
+      font-size: $fontNormal;
+      font-weight: $normal;
+      line-height: 24px;
+      transition: $transitionNormal;
+
+      &:focus {
+        border-color: $teal;
+      }
+    }
+
+    i {
+      &.slash-icon {
+        position: absolute;
+        top: 1rem;
+        right: 1rem;
+        color: $gray1;
+      }
+    }
+
+    button {
+      margin-top: 1rem;
+      @include btn-theme;
+    }
+  }
+
+  .form-switch {
+    .form-check-input {
+      width: 36px;
+      height: 20px;
+
+      &:checked {
+        background-color: $teal;
+        border-color: $teal;
+      }
+
+      &:focus {
+        border-color: $gray1;
+        box-shadow: none;
+      }
+    }
+
+    label {
+      color: $gray1;
+      font-family: $inter;
+      font-size: $fontSmall;
+      font-weight: $normal;
+      line-height: 24px;
+    }
+
+    span {
+      color: #344054;
+      font-family: $inter;
+      font-size: $fontSmall;
+      font-weight: 500;
+      line-height: 20px;
+    }
+  }
+}
+
+.form-control:focus {
+  box-shadow: none;
+}
+
+input:focus-visible {
+  outline: 0;
+}
+
+input:focus-visible {
+  outline: 0;
+}
+
+:focus-visible {
+  outline: 0;
+}
+
+.custom-border-bottom {
+  border-bottom: 1px solid #eaecf0;
+}
+
+// Modal
+.custom-modal {
+  .modal-dialog {
+    .modal-content {
+      border-radius: 0;
+
+      .modal-body {
+        padding: 0;
+        position: relative;
+
+        button {
+          &.btn-close {
+            position: absolute;
+            right: 7px;
+            top: 7px;
+            opacity: 1;
+          }
+        }
+
+        .top-header {
+          padding: 35px;
+          background: #eba346;
+          display: flex;
+          align-items: flex-end;
+          gap: 1rem;
+          justify-content: space-between;
+
+          .brand-details {
+            display: flex;
+            gap: 60px;
+            max-width: 800px;
+            width: 100%;
+
+            .brand-logo {
+              img {
+                max-width: 100px;
+              }
+            }
+
+            .brand-info {
+              h1 {
+                color: #10110c;
+                font-family: $inter;
+                font-size: 36px;
+                font-weight: 700;
+                line-height: 18px;
+                margin-bottom: 20px;
+              }
+
+              h2 {
+                color: #10110c;
+                font-family: $workSans;
+                font-size: 20px;
+                font-weight: 500;
+                line-height: 18px;
+              }
+
+              p {
+                color: #10110c;
+                font-family: $workSans;
+                font-size: 12px;
+                font-weight: 400;
+                line-height: 24px;
+                margin-bottom: 0;
+              }
+            }
+          }
+
+          .action-btn {
+            a {
+              @include btn-theme;
+            }
+          }
+        }
+
+        .details {
+          padding: 0 36px;
+
+          h3 {
+            color: #344054;
+            font-family: $workSans;
+            font-size: 20px;
+            font-weight: 600;
+            line-height: 24px;
+          }
+
+          section {
+            dl {
+              display: flex;
+
+              dt {
+                color: #344054;
+                font-family: $workSans;
+                font-size: 16px;
+                font-weight: 600;
+                line-height: 18px;
+              }
+
+              dd {
+                color: #344054;
+                font-family: $workSans;
+                font-size: 16px;
+                font-weight: 400;
+                line-height: 18px;
+                margin-left: 1rem;
+              }
+            }
+
+            h4 {
+              color: #344054;
+              font-family: $workSans;
+              font-size: 16px;
+              font-weight: 600;
+              line-height: 18px;
+            }
+
+            p {
+              color: #344054;
+              text-align: justify;
+              font-family: $workSans;
+              font-size: 16px;
+              font-weight: 400;
+              line-height: 24px;
+              max-width: 850px;
+            }
+
+            ul {
+              &.add-info {
+                li {
+                  list-style-type: none;
+                  margin-left: 0;
+                }
+              }
+
+              li {
+                list-style-type: disc;
+                margin-left: 1rem;
+                color: #344054;
+                font-family: $workSans;
+                font-size: 16px;
+                font-weight: 400;
+                line-height: 24px;
+              }
+            }
+          }
+        }
+
+        .modal-end {
+          text-align: right;
+          padding: 1rem;
+
+          button {
+            @include btn-theme;
+
+            &.btn-default {
+              background-color: $white;
+              color: $gray;
+              border-color: $gray2;
+
+              &:hover {
+                color: $teal;
+                border-color: $teal;
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}
+
+#msform .steper-wrapper:not(:first-of-type) {
+  display: none;
+}

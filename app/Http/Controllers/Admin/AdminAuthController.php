@@ -8,7 +8,10 @@ use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
 use App\Providers\RouteServiceProvider;
 use App\Models\Admin;
-use Auth;
+use Illuminate\Support\Facades\Auth;
+use Carbon\Carbon;
+use App\Models\LoginHistory;
+
 class AdminAuthController extends Controller
 {
     use RegistersUsers;
@@ -45,13 +48,30 @@ class AdminAuthController extends Controller
         // Use the attempt method for the admin guard
         if (Auth::guard($this->guard)->attempt($credentials, $request->filled('remember'))) {
             // Authentication passed...
+            $user = Auth::guard('admin')->user();
+            $sessionId = $request->session()->getId();
+            insertLoginHistory($user->id, 'admin', $sessionId, Carbon::now(), $request->ip(), $request->userAgent());
+
             return redirect()->intended($this->redirectTo);
         }
         return redirect()->back();
     }
 
-    public function logout()
+    public function logout(Request $request)
     {
+        $user = Auth::guard($this->guard)->user();
+        $sessionId = $request->session()->getId();
+        // Get the user's last login record for update
+        $lastLogin = LoginHistory::where('user_id', $user->id)
+            ->where('user_type', 'admin') 
+            ->where('session_id', $sessionId)
+            ->orderBy('login_time', 'desc')
+            ->first();
+
+        if ($lastLogin) {
+            $lastLogin->logout_time = Carbon::now(); 
+            $lastLogin->save();
+        }
         Auth::guard($this->guard)->logout(); // Logout the admin user
         return redirect('admin/login');
     }
