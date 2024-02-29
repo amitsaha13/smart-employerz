@@ -5,6 +5,8 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\JobSeeker;
 use App\Models\Recruiter\Job;
+use App\Models\Admin\JobCategory;
+use App\Models\Admin\CompensationAndBenefit;
 use App\Models\Recruiter\DraftJob;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Auth;
@@ -24,7 +26,8 @@ class JobCircularController extends Controller
         try {
             $user = Auth::guard('recruiter')->user();
             $countries = DB::table('countries')->get();
-            return view('recruiter.create-new-job', compact('user','countries'));
+            $jobCategories = JobCategory::where('status', 1)->get();
+            return view('recruiter.create-new-job', compact('user','countries','jobCategories'));
         } catch (\Exception $e) {
             \Log::error('Error in JobCircularController[index]: ' . $e->getMessage());
             abort(500, 'Something went wrong. Please try again later.');

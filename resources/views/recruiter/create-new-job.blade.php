@@ -396,11 +396,11 @@
                         <div class="col-md-6 col-lg-3">
                           <div class="form-group ms-md-4">
                             <label for="FromToFirst" class="form-label"
-                              >From</label
+                              >Minimum</label
                             >
                             <input
                               type="text"
-                              placeholder="Full Time"
+                              placeholder="Minimum"
                               class="form-control"
                               name="min_salary"
                               id="min_salary"
@@ -411,11 +411,11 @@
                         <div class="col-md-6 col-lg-3">
                           <div class="form-group me-md-4 me-lg-0">
                             <label for="FromToLast" class="form-label"
-                              >To</label
+                              >Maximum</label
                             >
                             <input
                               type="text"
-                              placeholder="Write Here"
+                              placeholder="Maximum"
                               class="form-control"
                               name="max_salary"
                               id="max_salary"
@@ -470,16 +470,9 @@
                             <label class="form-label" for="CompanyName"
                               >Alternative Company Name</label
                             >
-                            <select
-                              class="form-select"
-                              id="CompanyName"
-                              name="alternative_company_name"
-                              aria-label="Default select example"
-                            >
-                              <option value="1" selected>BCC</option>
-                              <option value="2">BXL</option>
-                              <option value="3">CNN</option>
-                            </select>
+                            <input type="text" class="form-control" id="alternative_company_name"
+                                            aria-describedby="jobTitle" name="alternative_company_name" />
+                            
                           </div>
                         </div>
                       </div>
@@ -520,10 +513,10 @@
                           name="business_area"
                           aria-label="Default select example"
                         >
-                          <option value="1" selected></option>
-                          <option value="2">Example-1</option>
-                          <option value="3">Example-2</option>
-                          <option value="4">Example-3</option>
+                        @foreach ($jobCategories as $category)
+<option value="{{ $category->id }}" selected>{{ $category->name }}</option>
+@endforeach
+                          
                         </select>
                       </div>
                     </div>
@@ -617,12 +610,8 @@
                                 <div class="col-md-6">
                                     <div class="form-group me-md-4">
                                         <label class="form-label" for="Nationality">Nationality</label>
-                                        <select class="form-select" id="nationality" name="nationality"
-                                            aria-label="Default select example">
-                                            <option value="Bangladeshi">Bangladeshi</option>
-                                            <option value="Indian">Indian</option>
-                                            <option value="Pakistani">Pakistani</option>
-                                        </select>
+                                        <input type="text" class="form-control" id="nationality" name="nationality"
+                                            aria-describedby="skillOne" />
                                     </div>
                                 </div>
                                 <div class="col-md-6">
@@ -864,7 +853,7 @@
 
                 $("#educational_requirements_preview").text($("#educational_requirements").val());
                 $("#training_certification_preview").text($("#training_certification").val());
-                 // Benefits Preview
+                // Benefits Preview
                 var benifitsText = $("#benifits").val();
                 var benifitsArray = benifitsText.split('\n-');
 
