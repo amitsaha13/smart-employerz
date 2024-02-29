@@ -1,0 +1,13 @@
+@import "fonts";
+@import "mixin";
+@import "reset";
+@import "variables";
+@import "colors"; 
+
+@import "./components/login-card.scss";
+@import "./components/form.scss";
+@import "./components/sidebar.scss";
+@import "./components/topbar.scss";
+@import "./components/footer.scss";
+@import "./components/dashboard.scss";
+ 

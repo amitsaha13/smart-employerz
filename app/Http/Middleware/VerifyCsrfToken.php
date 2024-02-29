@@ -12,13 +12,9 @@ class VerifyCsrfToken extends Middleware
      * @var array<int, string>
      */
     protected $except = [
-        '/admin/register',
-        '/admin/login',
-
-        '/recruiter/login',
-        '/recruiter/register',
-        
-        '/job_seeker/login',
-        '/job_seeker/register',
+        '/parse-cv',
+        '/auth/google/callback',
+        '/auth/linkedin/callback',
+        '/auth/microsoft/callback',
     ];
 }

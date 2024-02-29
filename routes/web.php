@@ -3,9 +3,138 @@ use Illuminate\Support\Facades\Route;
 
 // Auth::routes();
 
+
+// Admin
 use App\Http\Controllers\Admin\AdminAuthController;
+
+//Recruiter
 use App\Http\Controllers\Recruiter\RecruiterAuthController;
+use App\Http\Controllers\Recruiter\DashboardController;
+use App\Http\Controllers\Recruiter\JobCircularController;
+use App\Http\Controllers\Recruiter\JobSeekerManagementController;
+
+//JobSeeker
 use App\Http\Controllers\JobSeeker\JobSeekerAuthController;
+use App\Http\Controllers\JobSeeker\JobApplicationController;
+
+
+
+/*========= Recruiter routes=============
+===================================*/
+Route::middleware(['guest:recruiter'])->group(function () {
+    Route::get('/', [RecruiterAuthController::class, 'showLoginForm'])->name('login');
+    Route::post('/login', [RecruiterAuthController::class, 'login'])->name('recruiter.login');
+    Route::get('/recruiter/register', [RecruiterAuthController::class, 'showRegistrationForm'])->name('recruiter.register');
+    Route::post('/recruiter/register', [RecruiterAuthController::class, 'register'])->name('recruiter.register');
+    
+    //Authentication routes for Google
+    Route::get('/auth/google',[RecruiterAuthController::class, 'redirectToGoogle'])->name('auth.google');
+    Route::get('/auth/google/callback',[RecruiterAuthController::class, 'handleGoogleCallback'] );
+    
+    //Authentication routes for Linkedin
+    Route::get('/auth/linkedin',[RecruiterAuthController::class, 'redirectToLinkedIn'])->name('auth.linkedin');
+    Route::get('/auth/linkedin/callback',[RecruiterAuthController::class, 'handleLinkedInCallback'] );
+    
+    //Authentication routes for Microsoft
+    Route::get('/auth/microsoft',[RecruiterAuthController::class, 'redirectToMicrosoft'])->name('auth.microsoft');
+    Route::get('/auth/microsoft/callback',[RecruiterAuthController::class, 'handleMicrosoftCallback'] );
+
+});
+
+Route::middleware(['auth:recruiter'])->group(function () {
+    // Recruiter dashboard or other authenticated routes
+    Route::get('/recruiter/dashboard', [DashboardController::class, 'index'])->name('recruiter.dashboard');
+    Route::get('/create-new-job', [JobCircularController::class, 'index'])->name('create.new.job');
+    Route::post('/create-new-job', [JobCircularController::class, 'postCreateNewJob'])->name('create.new.job');
+    
+    
+
+
+    Route::get('/send-mail', [JobSeekerManagementController::class, 'sendIndividualEmailToJobSeeker']);
+    Route::get('/send-mail-bulk', [JobSeekerManagementController::class, 'sendBulkEmailToJobSeekers']);
+    
+    // Temporary 
+    Route::get('/create-job', [JobSeekerManagementController::class, 'createJob']);
+    Route::get('/logout', [RecruiterAuthController::class, 'logout']);
+});
+
+
+
+Route::post('/parse-cv', [JobApplicationController::class, 'storeCV']);
+Route::get('/fetch-job-description', [JobCircularController::class, 'fetchJobDetailsByAI']);
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 /*========= Admin routes=============
 ===================================*/
@@ -23,20 +152,7 @@ Route::middleware(['auth:admin'])->group(function () {
 });
 
 
-/*========= Recruiter routes=============
-===================================*/
-Route::middleware(['guest:recruiter'])->group(function () {
-    Route::get('/', [RecruiterAuthController::class, 'showLoginForm'])->name('login');
-    Route::post('/login', [RecruiterAuthController::class, 'login'])->name('recruiter.login');
-    Route::get('/recruiter/register', [RecruiterAuthController::class, 'showRegistrationForm'])->name('recruiter.register');
-    Route::post('/recruiter/register', [RecruiterAuthController::class, 'register'])->name('recruiter.register');
-});
 
-Route::middleware(['auth:recruiter'])->group(function () {
-    // Recruiter dashboard or other authenticated routes
-    Route::get('/recruiter/dashboard', [RecruiterAuthController::class, 'index'])->name('recruiter.dashboard');
-    Route::get('/logout', [RecruiterAuthController::class, 'logout']);
-});
 
 
 /*========= JobSeeker routes=============
@@ -58,6 +174,9 @@ Route::middleware(['auth:job_seeker'])->group(function () {
 Route::get('/welcome', function () {
     return view('welcome');
 });
+
+
+
 
 
 
