@@ -1,0 +1,434 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+    <link rel="icon" href="{{ asset('img/logo/favicon.ico') }}" title="smartemployerz" sizes="32x32" />
+    <meta name="description" content="" />
+    <meta name="keywords" content="" />
+    <meta name="author" content="smartemployerz" />
+
+    <!-- Bootstrap 5.1.3  -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous" />
+    <!--  Font-Awesome 5.15.4 -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" />
+    <!-- Select2 4.0.4 -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.4/css/select2.min.css" />
+    <!-- intlTelInput 17.0.13 -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/intl-tel-input/17.0.13/css/intlTelInput.css" />
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="{{ asset('css/style.css') }}" />
+
+    <title>{{ $brand }}</title>
+</head>
+
+<body>
+    <!-- Start Main Section -->
+    <main>
+        <div class="container">
+            <div class="row justify-content-center">
+                <!-- Main Bar -->
+                <div class="col-lg-6">
+                    <!-- Start New Job Form -->
+                    <form class="apply-job-form" id="formId">
+                        <div class="logo py-5">
+                            <a href="{{$website}}">
+                                <img src="{{ asset('img/logo/logo.png') }}" alt="Logo" class="img-fluid" />
+                            </a>
+                        </div>
+                        <div class="row">
+                            <div class="col-xl-12">
+                                <div class="form-group mb-3">
+                                    <div class="form-title">
+                                        <h2 class="text-capitalize">Apply Job</h2>
+                                        <p class="mb-0">
+                                            You Are Applying As
+                                            <a href="#">HR & Admin Officer</a> At
+                                            <a href="#">Yellow</a>
+                                        </p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-xl-12">
+                                <div class="form-group mb-3">
+                                    <div class="form-title custom-border-bottom">
+                                        <h2 class="text-capitalize">
+                                            Upload your CV to fill your form automatically
+                                        </h2>
+                                        <p class="mb-0">
+                                            Update your photo and personal details here.
+                                        </p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-xl-12">
+                                <div class="drop-zone mb-3">
+                                    <svg width="47" height="46" viewBox="0 0 47 46" fill="none"
+                                        xmlns="http://www.w3.org/2000/svg">
+                                        <rect x="3.5" y="3" width="40" height="40" rx="20"
+                                            fill="#F2F4F7" />
+                                        <rect x="3.5" y="3" width="40" height="40" rx="20"
+                                            stroke="#F9FAFB" stroke-width="6" />
+                                        <g clip-path="url(#clip0_2133_4048)">
+                                            <path
+                                                d="M26.8326 26.3352L23.4992 23.0019M23.4992 23.0019L20.1659 26.3352M23.4992 23.0019V30.5019M30.4909 28.3269C31.3037 27.8838 31.9458 27.1826 32.3158 26.334C32.6858 25.4855 32.7627 24.5379 32.5344 23.6408C32.3061 22.7436 31.7855 21.9481 31.0548 21.3797C30.3241 20.8113 29.425 20.5025 28.4992 20.5019H27.4492C27.197 19.5262 26.7269 18.6205 26.0742 17.8527C25.4215 17.0849 24.6033 16.4751 23.681 16.069C22.7587 15.663 21.7564 15.4713 20.7493 15.5084C19.7423 15.5455 18.7568 15.8104 17.8669 16.2832C16.977 16.7561 16.2058 17.4244 15.6114 18.2382C15.017 19.0519 14.6148 19.9898 14.4351 20.9814C14.2553 21.9729 14.3027 22.9923 14.5736 23.9629C14.8445 24.9335 15.3319 25.8301 15.9992 26.5852"
+                                                stroke="#475467" stroke-width="1.66667" stroke-linecap="round"
+                                                stroke-linejoin="round" />
+                                        </g>
+                                        <defs>
+                                            <clipPath id="clip0_2133_4048">
+                                                <rect width="20" height="20" fill="white"
+                                                    transform="translate(13.5 13)" />
+                                            </clipPath>
+                                        </defs>
+                                    </svg>
+
+                                    <h3 class="drop-zone__prompt">
+                                        <span>Click to upload</span>or drag and drop your CV
+                                    </h3>
+                                    <p>PDF or doc File (max. 5MB)</p>
+                                    <input type="file" name="myFile" class="drop-zone__input" />
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-xl-12">
+                                <div class="title-bar-with-btn mb-2">
+                                    <div class="form-group mb-3 w-100">
+                                        <div
+                                            class="form-title d-sm-flex align-items-center
+                        text-center text-sm-start
+                        justify-content-between custom-border-bottom">
+                                            <div class="mb-3 mb-sm-0">
+                                                <h2 class="text-capitalize ">Personal Information</h2>
+                                                <p class="mb-0">
+                                                    You Can Still Fill the Form Manually
+                                                </p>
+                                            </div>
+                                            <button class="mt-0 mx-auto mx-sm-0 ">
+                                                <span>Apply With Linkedin</span>
+                                            </button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-xl-12">
+                                <div class="edit-image mb-3">
+                                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none"
+                                        xmlns="http://www.w3.org/2000/svg">
+                                        <circle cx="12" cy="12" r="12" fill="#F2F8F8" />
+                                        <path
+                                            d="M15.0779 6.50136C15.2368 6.34241 15.4255 6.21632 15.6332 6.1303C15.8409 6.04428 16.0635 6 16.2883 6C16.513 6 16.7356 6.04428 16.9433 6.1303C17.151 6.21632 17.3397 6.34241 17.4986 6.50136C17.6576 6.66031 17.7837 6.84901 17.8697 7.05669C17.9557 7.26436 18 7.48695 18 7.71174C18 7.93653 17.9557 8.15912 17.8697 8.3668C17.7837 8.57447 17.6576 8.76317 17.4986 8.92212L9.32855 17.0922L6 18L6.90779 14.6714L15.0779 6.50136Z"
+                                            fill="#FFFDFD" stroke="#00756A" stroke-width="1.6"
+                                            stroke-linecap="round" stroke-linejoin="round" />
+                                    </svg>
+
+                                    <img src="./img/avatar.png" class="img-fluid" alt="avatar" />
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row mb-4">
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label class="form-label" for="firstName">First Name</label>
+                                    <input type="text" class="form-control" id="firstName"
+                                        aria-describedby="firstName" />
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label class="form-label" for="lastName">Last Name</label>
+                                    <input type="text" class="form-control" id="lastName"
+                                        aria-describedby="lastName" />
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label class="form-label" for="email">Email</label>
+                                    <input class="form-control" type="email" id="email" />
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label class="form-label" for="confirmEmail">Confirm Email</label>
+                                    <input class="form-control" type="email" id="confirmEmail" />
+                                </div>
+                            </div>
+                            <div class="col-md-12">
+                                <div class="form-group">
+                                    <label class="form-label" for="mobile_code">Phone Number</label>
+                                    <input oninput="this.className = ''" class="form-control" type="number"
+                                        id="mobile_code" />
+                                </div>
+                            </div>
+                            <div class="col-md-12">
+                                <div class="form-group">
+                                    <label for="floatingTextarea" class="form-label">Address</label>
+                                    <div class="form-floating">
+                                        <textarea class="form-control h-auto" rows="1" cols="1" id="floatingTextarea">
+Dhaka, Bangladesh
+                        </textarea>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="col-md-12">
+                                <div class="input-title-wrapper mb-3">
+                                    <p class="mb-0">Experience</p>
+                                    <button onclick="addExperience()">+ Add</button>
+                                </div>
+                            </div>
+                            <div id="showExperience" style="display: none">
+                                <div class="col-md-12 mt-0">
+                                    <div class="form-group">
+                                        <input type="text" class="form-control" id="firstName"
+                                            aria-describedby="firstName" />
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="col-md-12">
+                                <div class="input-title-wrapper mb-3">
+                                    <p class="mb-0">Education</p>
+                                    <button onclick="addEducation()">+ Add</button>
+                                </div>
+                            </div>
+                            <div id="showEducation" style="display: none">
+                                <div class="col-md-12 mt-0">
+                                    <div class="form-group">
+                                        <input type="text" class="form-control" id="firstName"
+                                            aria-describedby="firstName" />
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="col-md-12">
+                                <div class="input-title-wrapper mb-3">
+                                    <p class="mb-0">Skills</p>
+                                    <button onclick="addSkills()">+ Add</button>
+                                </div>
+                            </div>
+                            <div id="showSkills" style="display: none">
+                                <div class="col-md-12 mt-0">
+                                    <div class="form-group">
+                                        <input type="text" class="form-control" id="firstName"
+                                            aria-describedby="firstName" />
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label for="Certifications" class="form-label">Your LinkedIn
+                                    </label>
+                                    <input type="url" class="form-control" id="Certifications"
+                                        aria-describedby="Certifications" />
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label for="Specialities" class="form-label">Your Website</label>
+                                    <input type="url" class="form-control" id="Specialities"
+                                        aria-describedby="Specialities" />
+                                </div>
+                            </div>
+                            <div class="col-md-12">
+                                <div class="form-group">
+                                    <label for="floatingTextarea" class="form-label">Message For Hiring
+                                        Manager</label>
+                                    <div class="form-floating">
+                                        <textarea class="form-control" id="floatingTextarea">
+Lorem ipsum dolor sit amet consectetur. Lectus commodo sagittis accumsan felis elementum egestas pellentesque fames. Lacinia ut dictum vitae non neque ut.
+                        </textarea>
+                                    </div>
+                                    <div class="form-text">275 characters left</div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row mb-4">
+                            <div class="col-xl-12">
+                                <div class="wrapper">
+                                    <div class="action-buttons float-end" role="group" aria-label="Basic example">
+                                        <button type="button" class="btn-form btn-form-continue me-0"
+                                            data-bs-toggle="modal" data-bs-target="#exampleModal">
+                                            Preview
+                                        </button>
+                                        <button type="button" class="btn-form btn-default">
+                                            Save
+                                        </button>
+                                        <button type="button" href="./create-new-job.html"
+                                            class="btn-form btn-default">
+                                            Back
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </form>
+                    <!-- End New Job Form -->
+                </div>
+            </div>
+        </div>
+    </main>
+    <!-- End Main Section -->
+
+    <!-- JQuery 3.7.1 -->
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js"
+        integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>
+    <!-- Bootstrap 5.1.3 -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-ka7Sk0Gln4gmtz2MlQnikT1wXgYsOg+OMhuP+IlRH9sENBO0LRn5q+8nbTov4+1p" crossorigin="anonymous">
+    </script>
+    <!-- Select2 4.0.4 -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.4/js/select2.min.js"></script>
+    <!-- intlTelInput 17.0.13 -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/intl-tel-input/17.0.13/js/intlTelInput-jquery.min.js"></script>
+    <!-- Custom JS -->
+    <script src="./js/custom.js"></script>
+    <script>
+        document.querySelectorAll(".drop-zone__input").forEach((inputElement) => {
+            const dropZoneElement = inputElement.closest(".drop-zone");
+
+            dropZoneElement.addEventListener("click", (e) => {
+                inputElement.click();
+            });
+
+            inputElement.addEventListener("change", (e) => {
+                if (inputElement.files.length) {
+                    updateThumbnail(dropZoneElement, inputElement.files[0]);
+                }
+            });
+
+            dropZoneElement.addEventListener("dragover", (e) => {
+                e.preventDefault();
+                dropZoneElement.classList.add("drop-zone--over");
+            });
+
+            ["dragleave", "dragend"].forEach((type) => {
+                dropZoneElement.addEventListener(type, (e) => {
+                    dropZoneElement.classList.remove("drop-zone--over");
+                });
+            });
+
+            dropZoneElement.addEventListener("drop", (e) => {
+                e.preventDefault();
+
+                if (e.dataTransfer.files.length) {
+                    inputElement.files = e.dataTransfer.files;
+                    updateThumbnail(dropZoneElement, e.dataTransfer.files[0]);
+                }
+
+                dropZoneElement.classList.remove("drop-zone--over");
+            });
+        });
+
+        /**
+         * Updates the thumbnail on a drop zone element.
+         *
+         * @param {HTMLElement} dropZoneElement
+         * @param {File} file
+         */
+        function updateThumbnail(dropZoneElement, file) {
+            let thumbnailElement =
+                dropZoneElement.querySelector(".drop-zone__thumb");
+
+            // First time - remove the prompt
+            if (dropZoneElement.querySelector(".drop-zone__prompt")) {
+                dropZoneElement.querySelector(".drop-zone__prompt").remove();
+            }
+
+            // First time - there is no thumbnail element, so lets create it
+            if (!thumbnailElement) {
+                thumbnailElement = document.createElement("div");
+                thumbnailElement.classList.add("drop-zone__thumb");
+                dropZoneElement.appendChild(thumbnailElement);
+            }
+
+            thumbnailElement.dataset.label = file.name;
+
+            // Show thumbnail for image files
+            if (file.type.startsWith("image/")) {
+                const reader = new FileReader();
+
+                reader.readAsDataURL(file);
+                reader.onload = () => {
+                    thumbnailElement.style.backgroundImage = `url('${reader.result}')`;
+                };
+            } else {
+                thumbnailElement.style.backgroundImage = null;
+            }
+        }
+    </script>
+    <script>
+        // Show Experience
+        function addExperience() {
+            var x = document.getElementById("showExperience");
+            if (x.style.display === "none") {
+                x.style.display = "block";
+            } else {
+                x.style.display = "none";
+            }
+        }
+        // Show Education
+        function addEducation() {
+            var x = document.getElementById("showEducation");
+            if (x.style.display === "none") {
+                x.style.display = "block";
+            } else {
+                x.style.display = "none";
+            }
+        }
+        // Show Skills
+        function addSkills() {
+            var x = document.getElementById("showSkills");
+            if (x.style.display === "none") {
+                x.style.display = "block";
+            } else {
+                x.style.display = "none";
+            }
+        }
+    </script>
+    <script>
+        // Form Reloading stop
+        //Get form element
+        var form = document.getElementById("formId");
+
+        function submitForm(event) {
+            //Preventing page refresh
+            event.preventDefault();
+        }
+
+        //Calling a function during form submission.
+        form.addEventListener("submit", submitForm);
+    </script>
+    <!-- Modal -->
+    <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel"
+        aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h1 class="modal-title fs-5" id="exampleModalLabel">Modal title</h1>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">...</div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+                        Close
+                    </button>
+                    <button type="button" class="btn btn-primary">Save changes</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+
+</html>
