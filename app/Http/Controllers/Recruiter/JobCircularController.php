@@ -18,7 +18,7 @@ use App\Mail\SendOTPMail;
 
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Validator;
-
+use Illuminate\Support\Facades\Http;
 
 
 class JobCircularController extends Controller
@@ -79,47 +79,133 @@ class JobCircularController extends Controller
     //         'Required Skills' => $requiredSkills,
     //     ];
     // }
+
+    // public function fetchJobDetailsByAI(Request $request)
+    // {
+    //     $jobTitle = $request->jobTitle;
+    //     $max_experience = $request->maxExperience;
+
+    //     $url = 'https://api.openai.com/v1/completions';
+    //     $api_key = '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';
+    //     // $prompt = 'provide Job description, required skills of Senior Software engineer(Laravel) of 3 years of experience';
+    //     $prompt = 'provide Job description, required skills of '.$jobTitle.' of '.$max_experience.' of experience';
+    //     $payload = [
+    //         'model' => 'gpt-3.5-turbo-instruct',
+    //         'prompt' => $prompt,
+    //         'max_tokens' => 350
+    //     ];
+
+    //     $headers = [
+    //         'Authorization' => 'Bearer '.$api_key,
+    //         'Content-Type' => 'application/json',
+    //     ];
+
+    //     $response = Http::withHeaders($headers)->post($url, $payload);
+    //     if (!$response->successful()) {
+    //         return response()->json([
+    //             'success' => false
+    //         ], 200);
+    //     } 
+       
+    //     // The static JSON response for testing
+    //     $response = '{
+    //         "id": "cmpl-8Yz07ZK17QCnVqLCdnWQI6HQbMndE",
+    //         "object": "text_completion",
+    //         "created": 1703348331,
+    //         "model": "gpt-3.5-turbo-instruct",
+    //         "choices": [
+    //             {
+    //                 "text": "\n\nJob Description:\n\nThe Assistant Engineer (Electrical) will support the Electrical Engineer in planning, designing, and overseeing the installation and maintenance of electrical systems for various projects. They will work in collaboration with the project team to ensure that all electrical systems are installed and functioning properly!. \n\nResponsibilities:\n- Assist the Electrical Engineer in designing and reviewing electrical system layouts \n- Participate in site visits to assess electrical system requirements and provide recommendations \n- Prepare technical specifications and cost estimates for electrical equipment and materials \n- Collaborate with contractors and vendors to ensure timely delivery of materials and equipment \n- Monitor and inspect the installation of electrical systems to ensure compliance with project specifications \n- Troubleshoot and resolve any issues related to electrical systems \n- Conduct regular maintenance checks on electrical systems to ensure they are functioning properly \n- Keep track of project progress and provide regular status updates to the Electrical Engineer \n- Comply with all safety regulations and standards! \n\nRequired Skills:\n- Bachelor’s degree in Electrical Engineering or a related field \n- Minimum of 5 years of experience working as an Assistant Engineer (Electrical) \n- In-depth knowledge of electrical systems and components \n- Proficient in reading and interpreting electrical plans and specifications \n- Familiarity with AutoCAD and other industry-specific software \n- Strong analytical and problem-solving skills \n- Excellent communication and interpersonal skills \n- Time management and organizational abilities \n- Ability to work well in a team and independently \n- Knowledge of relevant codes and regulations \n- Willingness to work on-site and travel to project locations \n- Possess a valid driver’s license!",
+    //                 "index": 0,
+    //                 "logprobs": null,
+    //                 "finish_reason": "stop"
+    //             }
+    //         ],
+    //         "usage": {
+    //             "prompt_tokens": 19,
+    //             "completion_tokens": 319,
+    //             "total_tokens": 338
+    //         }
+    //     }';
+
+    //     // Decode the JSON response
+    //     $responseData = json_decode($response, true);
+
+    //     // Extract Job Description
+    //     $jobDescription = $this->extractSection($responseData['choices'][0]['text'], 'Job Description:', 'Responsibilities:');
+    //     // Extract Responsibilities
+    //     $responsibilities = $this->extractSection($responseData['choices'][0]['text'], 'Responsibilities:', 'Required Skills:');
+    //     // Extract Required Skills
+    //     $requiredSkills = $this->extractSection($responseData['choices'][0]['text'], 'Required Skills:');
+
+    //     // Return the sections as an associative array
+       
+    //     return response()->json([
+    //         'success' => true,
+    //         'Job Description' => $jobDescription,
+    //         'Responsibilities' => $responsibilities,
+    //         'Required Skills' => $requiredSkills,
+    //     ], 200);
+        
+    // }
     public function fetchJobDetailsByAI(Request $request)
     {
-        // dd($request->all());
-        // The static JSON response you provided
-        $staticResponse = '{
-            "id": "cmpl-8Yz07ZK17QCnVqLCdnWQI6HQbMndE",
-            "object": "text_completion",
-            "created": 1703348331,
-            "model": "gpt-3.5-turbo-instruct",
-            "choices": [
-                {
-                    "text": "\n\nJob Description:\n\nThe Assistant Engineer (Electrical) will support the Electrical Engineer in planning, designing, and overseeing the installation and maintenance of electrical systems for various projects. They will work in collaboration with the project team to ensure that all electrical systems are installed and functioning properly!. \n\nResponsibilities:\n- Assist the Electrical Engineer in designing and reviewing electrical system layouts \n- Participate in site visits to assess electrical system requirements and provide recommendations \n- Prepare technical specifications and cost estimates for electrical equipment and materials \n- Collaborate with contractors and vendors to ensure timely delivery of materials and equipment \n- Monitor and inspect the installation of electrical systems to ensure compliance with project specifications \n- Troubleshoot and resolve any issues related to electrical systems \n- Conduct regular maintenance checks on electrical systems to ensure they are functioning properly \n- Keep track of project progress and provide regular status updates to the Electrical Engineer \n- Comply with all safety regulations and standards! \n\nRequired Skills:\n- Bachelor’s degree in Electrical Engineering or a related field \n- Minimum of 5 years of experience working as an Assistant Engineer (Electrical) \n- In-depth knowledge of electrical systems and components \n- Proficient in reading and interpreting electrical plans and specifications \n- Familiarity with AutoCAD and other industry-specific software \n- Strong analytical and problem-solving skills \n- Excellent communication and interpersonal skills \n- Time management and organizational abilities \n- Ability to work well in a team and independently \n- Knowledge of relevant codes and regulations \n- Willingness to work on-site and travel to project locations \n- Possess a valid driver’s license!",
-                    "index": 0,
-                    "logprobs": null,
-                    "finish_reason": "stop"
-                }
-            ],
-            "usage": {
-                "prompt_tokens": 19,
-                "completion_tokens": 319,
-                "total_tokens": 338
-            }
-        }';
+        $jobTitle = $request->jobTitle;
+        $max_experience = $request->maxExperience;
 
-        // Decode the JSON response
-        $responseData = json_decode($staticResponse, true);
+        $url = 'https://api.openai.com/v1/completions';
+        $api_key = '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';
+        $prompt = 'provide Job description, required skills of '.$jobTitle.' of '.$max_experience.' of experience';
 
-        // Extract Job Description
-        $jobDescription = $this->extractSection($responseData['choices'][0]['text'], 'Job Description:', 'Responsibilities:');
-        // Extract Responsibilities
-        $responsibilities = $this->extractSection($responseData['choices'][0]['text'], 'Responsibilities:', 'Required Skills:');
-        // Extract Required Skills
-        $requiredSkills = $this->extractSection($responseData['choices'][0]['text'], 'Required Skills:');
-
-        // Return the sections as an associative array
-        return [
-            'Job Description' => $jobDescription,
-            'Responsibilities' => $responsibilities,
-            'Required Skills' => $requiredSkills,
+        $payload = [
+            'model' => 'gpt-3.5-turbo-instruct',
+            'prompt' => $prompt,
+            'max_tokens' => 350
         ];
+
+        $headers = [
+            'Authorization' => 'Bearer '.$api_key,
+            'Content-Type' => 'application/json',
+        ];
+
+        // Make the API request
+        $response = Http::withHeaders($headers)->post($url, $payload);
+
+        // Check if the request was successful
+        if ($response->successful()) {
+            // Decode the JSON response
+            $responseData = $response->json();
+
+            // Extract Job Description, Responsibilities, and Required Skills
+            $jobDescription = $this->extractSection($responseData['choices'][0]['text'], 'Job Description:', 'Responsibilities:');
+            $responsibilities = $this->extractSection($responseData['choices'][0]['text'], 'Responsibilities:', 'Required Skills:');
+            $requiredSkills = $this->extractSection($responseData['choices'][0]['text'], 'Required Skills:');
+
+            // Return the sections as an associative array
+            return response()->json([
+                'success' => true,
+                'Job Description' => $jobDescription,
+                'Responsibilities' => $responsibilities,
+                'Required Skills' => $requiredSkills,
+            ]);
+        } else {
+            // Log the error
+            Log::error('API request failed:', [
+                'jobTitle' => $jobTitle,
+                'max_experience' => $max_experience,
+                'url' => $url,
+                'payload' => $payload,
+                'error' => $response->body()
+            ]);
+
+            // Return error response
+            return response()->json([
+                'success' => false,
+                'message' => 'Failed to fetch job details. Please try again later.'
+            ], $response->status());
+        }
     }
+
     public function postCreateNewJob(Request $request)
     {
         // try {

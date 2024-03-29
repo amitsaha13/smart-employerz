@@ -103,9 +103,9 @@
                                 </div>
                                 <div class="col-md-6">
                                     <div class="form-group ms-md-4">
-                                        <label class="form-label" for="numberOfEmployees">Job
+                                        <label class="form-label" for="jobLevel">Job
                                             Level</label>
-                                        <select class="form-select" name="job_level" id="numberOfEmployees"
+                                        <select class="form-select" name="job_level" id="job_level"
                                             aria-label="Default select example" required>
                                             <option value="1" selected>Entry Level</option>
                                             <option value="2">Intermediate Level</option>
@@ -147,22 +147,6 @@
                         <div class="col-xl-12">
                             <div class="title-bar-with-btn mb-4">
                                 <h3 class="title-bar">Description</h3>
-                                {{-- <button onclick="generateWithAI()">
-                                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="15"
-                                        viewBox="0 0 16 15" fill="none">
-                                        <path
-                                            d="M8.32917 0.956239C8.41897 0.679846 8.80999 0.679847 8.8998 0.95624L9.65243 3.27259C9.69259 3.3962 9.80778 3.47989 9.93775 3.47989H12.3733C12.6639 3.47989 12.7848 3.85177 12.5496 4.02259L10.5792 5.45418C10.4741 5.53057 10.4301 5.66598 10.4703 5.78959L11.2229 8.10594C11.3127 8.38233 10.9963 8.61217 10.7612 8.44135L8.79082 7.00977C8.68567 6.93337 8.54329 6.93337 8.43815 7.00977L6.46774 8.44135C6.23263 8.61217 5.91628 8.38233 6.00609 8.10594L6.75872 5.78959C6.79888 5.66598 6.75488 5.53057 6.64974 5.45418L4.67933 4.02259C4.44421 3.85177 4.56505 3.47989 4.85566 3.47989H7.29122C7.42119 3.47989 7.53638 3.3962 7.57654 3.27259L8.32917 0.956239Z"
-                                            fill="#FCBD1C" />
-                                        <path
-                                            d="M3.40699 8.33905C3.4968 8.06266 3.88782 8.06266 3.97762 8.33905L4.45393 9.80496C4.49409 9.92857 4.60928 10.0123 4.73925 10.0123H6.2806C6.57121 10.0123 6.69205 10.3841 6.45693 10.555L5.20995 11.4609C5.10481 11.5373 5.06081 11.6728 5.10097 11.7964L5.57728 13.2623C5.66708 13.5387 5.35074 13.7685 5.11562 13.5977L3.86864 12.6917C3.7635 12.6153 3.62112 12.6153 3.51597 12.6917L2.26899 13.5977C2.03388 13.7685 1.71754 13.5387 1.80734 13.2623L2.28364 11.7964C2.32381 11.6728 2.27981 11.5373 2.17466 11.4609L0.927684 10.555C0.69257 10.3841 0.813402 10.0123 1.10402 10.0123H2.64537C2.77534 10.0123 2.89053 9.92857 2.93069 9.80496L3.40699 8.33905Z"
-                                            fill="#FCBD1C" />
-                                        <path
-                                            d="M13.3455 9.28072C13.4054 9.09646 13.6661 9.09646 13.726 9.28072L14.0435 10.258C14.0703 10.3404 14.1471 10.3962 14.2337 10.3962H15.2613C15.455 10.3962 15.5356 10.6441 15.3788 10.758L14.5475 11.362C14.4774 11.4129 14.4481 11.5032 14.4749 11.5856L14.7924 12.5629C14.8523 12.7471 14.6414 12.9004 14.4846 12.7865L13.6533 12.1825C13.5832 12.1316 13.4883 12.1316 13.4182 12.1825L12.5869 12.7865C12.4301 12.9004 12.2192 12.7471 12.2791 12.5629L12.5966 11.5856C12.6234 11.5032 12.5941 11.4129 12.524 11.362L11.6927 10.758C11.5359 10.6441 11.6165 10.3962 11.8102 10.3962H12.8378C12.9244 10.3962 13.0012 10.3404 13.028 10.258L13.3455 9.28072Z"
-                                            fill="#FCBD1C" />
-                                    </svg>
-                                    Generate With Ai
-                                </button> --}}
-
                                 <button type="button" onclick="generateWithAI()"><svg xmlns="http://www.w3.org/2000/svg"
                                         width="16" height="15" viewBox="0 0 16 15" fill="none">
                                         <path
@@ -534,40 +518,6 @@
                         />
                       </div>
                     </div>
-                    {{-- <div class="col-md-6">
-                      <div class="form-group">
-                        <label class="form-label" for="IndustryExpert"
-                          >Level of Education</label
-                        >
-                        <select
-                          class="form-select"
-                          id="IndustryExpert"
-                          name="level_of_education"
-                          aria-label="Default select example"
-                        >
-                          <option value="1">Level One</option>
-                          <option value="2">Level Two</option>
-                          <option value="3">Level Three</option>
-                        </select>
-                      </div>
-                    </div>
-                    <div class="col-md-6">
-                      <div class="form-group me-md-4">
-                        <label class="form-label" for="IndustryExpert"
-                          >Degree</label
-                        >
-                        <select
-                          class="form-select"
-                          id="IndustryExpert"
-                          name="degree"
-                          aria-label="Default select example"
-                        >
-                          <option value="Masters">Masters</option>
-                          <option value="Arts">Arts</option>
-                          <option value="Diploma">Diploma</option>
-                        </select>
-                      </div>
-                    </div> --}}
                     <div class="col-md-12">
                       <div class="form-group me-md-4">
                         <label for="skillOne" class="form-label"
@@ -807,11 +757,37 @@
 
     <script>
         function generateWithAI() {
+            var jobTitle = $("#jobTitle").val().trim();
+            var jobLevel = $("#job_level option:selected").text().trim();
+            var minExperience = ($("#min_experience").val().trim() + ' Years').trim();
+            var maxExperience = ($("#max_experience").val().trim() + ' Years').trim();
 
-            // Simulate the fetch request to the specified route
-            fetch('/fetch-job-description')
+            var payload = {
+                jobTitle: jobTitle,
+                jobLevel: jobLevel,
+                minExperience: minExperience,
+                maxExperience: maxExperience
+            };
+            // Fetch CSRF token from the meta tag
+            var token = $('meta[name="csrf-token"]').attr('content');
+
+            fetch('/fetch-job-details', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'X-CSRF-TOKEN': token
+                    },
+                    body: JSON.stringify(payload)
+                })
                 .then(response => response.json())
                 .then(data => {
+                    // Check if the response indicates failure
+                    if (data.success === false) {
+                        // Display an alert message to the user
+                        alert('Failed to fetch job details. Please try again later.');
+                        return;
+                    }
+
                     // Set the fetched data to the corresponding form fields
                     document.getElementById('jobDescription').value = data['Job Description'];
                     document.getElementById('responsibilities').value = data['Responsibilities'];
@@ -819,7 +795,6 @@
                 })
                 .catch(error => console.error('Error fetching job details:', error));
         }
-
 
         // Update Preview Job Circular Modal
         $(document).ready(function() {
@@ -849,7 +824,6 @@
                 for (var i = 0; i < skillsArray.length; i++) {
                     $("#requiredSkills_preview").append("<li>" + skillsArray[i].trim() + "</li>");
                 }
-
 
                 $("#educational_requirements_preview").text($("#educational_requirements").val());
                 $("#training_certification_preview").text($("#training_certification").val());
