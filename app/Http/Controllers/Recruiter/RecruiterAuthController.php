@@ -62,7 +62,7 @@ class RecruiterAuthController extends Controller
     public function sendEmail()
     {
         $toEmail = 'amitsahaami.dev@gmail.com';
-        $subject = 'Subject of the email';
+        $subject = 'Email Verification';
         
         $customMessage = 'Insert this OTP to verify '.generateOTP() ;
 

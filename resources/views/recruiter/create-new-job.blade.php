@@ -871,7 +871,7 @@
                 }
 
                 $("#gender_preview").text($("#gender option:selected").text());
-                $("#nationality_preview").text($("#nationality option:selected").text());
+                $("#nationality_preview").text($("#nationality").val());
                 $("#specialization_preview").text($("#specialization").val());
                 $("#industry_preview").text($("#CompanyIndustry").val());
                 $("#age_preview").text($("#min_age").val() + ' - ' + $("#max_age").val() + ' Years');
