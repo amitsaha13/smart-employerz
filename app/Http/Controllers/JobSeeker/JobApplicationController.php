@@ -14,6 +14,12 @@ use Str;
 
 class JobApplicationController extends Controller
 {
+    public function applyJob()
+    {
+        $brand = generalInformation('brand');
+        $website = generalInformation('website');
+        return view('job_seeker.apply-job',compact('brand','website'));
+    }
     public function storeCV(Request $request)
     {
         // Validate the uploaded file

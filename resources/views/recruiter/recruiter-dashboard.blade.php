@@ -11,7 +11,7 @@
                 <div class="content">
                     <div class="company-intro">
                         <h3>
-                            {{$user->company_name}}
+                            {{ $user->company_name }}
                             <a href="#"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16"
                                     viewBox="0 0 16 16" fill="none">
                                     <path
@@ -86,7 +86,7 @@
                                 </svg>
 
                                 <div class="content">
-                                    <h3>{{$jobCounts->active_count}}</h3>
+                                    <h3>{{ $jobCounts->active_count ?? 0 }}</h3>
                                     <span>Active Jobs</span>
                                 </div>
                             </div>
@@ -112,7 +112,7 @@
                                     <line x1="16.7967" y1="13.2889" x2="16.8916" y2="17.2878" stroke="white" />
                                 </svg>
                                 <div class="content">
-                                    <h3>{{$jobCounts->pending_count}}</h3>
+                                    <h3>{{ $jobCounts->pending_count ?? 0 }}</h3>
                                     <span>Pending Jobs</span>
                                 </div>
                             </div>
@@ -133,7 +133,7 @@
                                     <circle cx="23.2485" cy="24.7212" r="1.24853" fill="#FF5F57" />
                                 </svg>
                                 <div class="content">
-                                    <h3>{{$jobCounts->expired_count}}</h3>
+                                    <h3>{{ $jobCounts->expired_count ?? 0 }}</h3>
                                     <span>Expired Jobs</span>
                                 </div>
                             </div>
@@ -168,7 +168,7 @@
                                 </svg>
 
                                 <div class="content">
-                                    <h3>{{$jobCounts->draft_count}}</h3>
+                                    <h3>{{ $jobCounts->draft_count ?? 0 }}</h3>
                                     <span>Draft Jobs</span>
                                 </div>
                             </div>

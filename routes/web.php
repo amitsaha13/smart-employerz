@@ -19,8 +19,8 @@ use App\Http\Controllers\JobSeeker\JobApplicationController;
 
 
 
-/*========= Recruiter routes=============
-===================================*/
+/*========= Recruiter routes==============
+==========---------------------=========*/
 Route::middleware(['guest:recruiter'])->group(function () {
     Route::get('/', [RecruiterAuthController::class, 'showLoginForm'])->name('login');
     Route::post('/login', [RecruiterAuthController::class, 'login'])->name('recruiter.login');
@@ -59,9 +59,11 @@ Route::middleware(['auth:recruiter'])->group(function () {
 });
 
 
+Route::get('/apply-job', [JobApplicationController::class, 'applyJob']);
 
 Route::post('/parse-cv', [JobApplicationController::class, 'storeCV']);
 Route::get('/fetch-job-description', [JobCircularController::class, 'fetchJobDetailsByAI']);
+Route::post('/fetch-job-details', [JobCircularController::class, 'fetchJobDetailsByAI']);
 
 
 

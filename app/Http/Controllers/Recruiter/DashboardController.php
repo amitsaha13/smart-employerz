@@ -14,6 +14,7 @@ class DashboardController extends Controller
         $user = Auth::guard('recruiter')->user();
 
         $jobCounts = DB::table('jobs')
+        ->where('recruiter_id', $user->id)
         ->select(
             DB::raw('SUM(CASE WHEN status = 1 AND deadline > NOW() THEN 1 ELSE 0 END) as active_count'),
             DB::raw('SUM(CASE WHEN status = 0 THEN 1 ELSE 0 END) as pending_count'),

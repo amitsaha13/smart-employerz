@@ -78,5 +78,26 @@ function insertLoginHistory($userType) {
 }
 //Calling procedure example: insertLoginHistory($this->guard);
 
-        
+function numberToWord($number) {
+    $words = [
+        '', 'One', 'Two', 'Three', 'Four', 
+        'Five', 'Six', 'Seven', 'Eight', 'Nine', 
+        'Ten', 'Eleven', 'Twelve', 'Thirteen', 'Fourteen', 
+        'Fifteen', 'Sixteen', 'Seventeen', 'Eighteen', 'Nineteen'
+    ];
+
+    $tens = [
+        '', '', 'Twenty', 'Thirty', 'Forty', 
+        'Fifty', 'Sixty', 'Seventy', 'Eighty', 'Ninety'
+    ];
+    if ($number == 0) {
+        return 'Zero';
+    }elseif ($number < 20) {
+        return $words[$number];
+    } elseif ($number < 100) {
+        return $tens[floor($number / 10)] . ' ' . $words[$number % 10];
+    } else {
+        return 'Number out of range';
+    }
+}
        
