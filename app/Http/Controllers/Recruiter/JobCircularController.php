@@ -86,7 +86,7 @@ class JobCircularController extends Controller
     //     $max_experience = $request->maxExperience;
 
     //     $url = 'https://api.openai.com/v1/completions';
-    //     $api_key = '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';
+    //     $api_key = 'api-key';
     //     // $prompt = 'provide Job description, required skills of Senior Software engineer(Laravel) of 3 years of experience';
     //     $prompt = 'provide Job description, required skills of '.$jobTitle.' of '.$max_experience.' of experience';
     //     $payload = [
@@ -154,7 +154,7 @@ class JobCircularController extends Controller
         $max_experience = $request->maxExperience;
 
         $url = 'https://api.openai.com/v1/completions';
-        $api_key = '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';
+        $api_key = 'api-key';
         $prompt = 'provide Job description, required skills of '.$jobTitle.' of '.$max_experience.' of experience';
 
         $payload = [
