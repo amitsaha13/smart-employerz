@@ -85,7 +85,7 @@ class JobCircularController extends Controller
     //     $jobTitle = $request->jobTitle;
     //     $max_experience = $request->maxExperience;
 
-    //     $url = 'https://api.openai.com/v1/completions';
+    //     $url = 'https://api.openaiamit.com/v1/completions';
     //     $api_key = 'api-key';
     //     // $prompt = 'provide Job description, required skills of Senior Software engineer(Laravel) of 3 years of experience';
     //     $prompt = 'provide Job description, required skills of '.$jobTitle.' of '.$max_experience.' of experience';
