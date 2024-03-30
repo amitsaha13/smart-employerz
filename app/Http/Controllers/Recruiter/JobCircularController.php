@@ -151,16 +151,22 @@ class JobCircularController extends Controller
     public function fetchJobDetailsByAI(Request $request)
     {
         $jobTitle = $request->jobTitle;
+        $min_experience = $request->minExperience;
         $max_experience = $request->maxExperience;
+        if (!$jobTitle || !$min_experience || !$max_experience) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Job Title and Experiences Must be filled'
+            ], 400);
+        }
 
-        $url = 'https://api.openai.com/v1/completions';
-        $api_key = 'api-key';
-        $prompt = 'provide Job description, required skills of '.$jobTitle.' of '.$max_experience.' of experience';
-
+        $url = settings('JOB_CIRCULAR_API_URL');
+        $api_key = settings('JOB_CIRCULAR_API_KEY');
+        $prompt = 'Provide Job Description, Responsibilities and Required Skills of '.$jobTitle.' of '.$min_experience. ' to '.$max_experience.' years of experience';
         $payload = [
-            'model' => 'gpt-3.5-turbo-instruct',
+            'model' => settings('JOB_CIRCULAR_API_MODEL'),
             'prompt' => $prompt,
-            'max_tokens' => 350
+            'max_tokens' => settings('JOB_CIRCULAR_API_MAX_TOKENS')
         ];
 
         $headers = [
@@ -171,39 +177,29 @@ class JobCircularController extends Controller
         // Make the API request
         $response = Http::withHeaders($headers)->post($url, $payload);
 
-        // Check if the request was successful
-        if ($response->successful()) {
-            // Decode the JSON response
-            $responseData = $response->json();
-
-            // Extract Job Description, Responsibilities, and Required Skills
-            $jobDescription = $this->extractSection($responseData['choices'][0]['text'], 'Job Description:', 'Responsibilities:');
-            $responsibilities = $this->extractSection($responseData['choices'][0]['text'], 'Responsibilities:', 'Required Skills:');
-            $requiredSkills = $this->extractSection($responseData['choices'][0]['text'], 'Required Skills:');
-
-            // Return the sections as an associative array
-            return response()->json([
-                'success' => true,
-                'Job Description' => $jobDescription,
-                'Responsibilities' => $responsibilities,
-                'Required Skills' => $requiredSkills,
-            ]);
-        } else {
-            // Log the error
-            Log::error('API request failed:', [
-                'jobTitle' => $jobTitle,
-                'max_experience' => $max_experience,
-                'url' => $url,
-                'payload' => $payload,
-                'error' => $response->body()
-            ]);
-
+        // Check if the request was not successful
+        if (!$response->successful()) {
             // Return error response
             return response()->json([
                 'success' => false,
                 'message' => 'Failed to fetch job details. Please try again later.'
             ], $response->status());
         }
+         // Decode the JSON response
+         $responseData = $response->json();
+
+         // Extract Job Description, Responsibilities, and Required Skills
+         $jobDescription = $this->extractSection($responseData['choices'][0]['text'], 'Job Description:', 'Responsibilities:');
+         $responsibilities = $this->extractSection($responseData['choices'][0]['text'], 'Responsibilities:', 'Required Skills:');
+         $requiredSkills = $this->extractSection($responseData['choices'][0]['text'], 'Required Skills:');
+
+         // Return the sections as an associative array
+         return response()->json([
+             'success' => true,
+             'Job Description' => $jobDescription,
+             'Responsibilities' => $responsibilities,
+             'Required Skills' => $requiredSkills,
+         ],200);
     }
 
     public function postCreateNewJob(Request $request)
