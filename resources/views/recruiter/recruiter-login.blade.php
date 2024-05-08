@@ -41,7 +41,7 @@
                     <div class="login-wrapper d-flex">
                         <div class="card login-card border-0 bg-transparent">
                             <div class="card-header bg-transparent border-0 p-0">
-                                <a href="./index.html">
+                                <a href="/">
                                     <img src="{{ asset('img/logo/logo.png') }}" alt="logo" class="img-fluid" />
                                 </a>
                             </div>
@@ -56,10 +56,12 @@
                                         <img src="{{ asset('img/auth/gmail.png') }}" alt="gmail-logo" />
                                         Login With Google
                                     </a>
-                                    <a href="/auth/microsoft"
-                                        class="text-center d-flex align-items-center justify-content-center text-decoration-none mb-3">
-                                        <img src="{{ asset('img/auth/microsoft.png') }}" alt="microsoft-logo" />
-                                        Login With Microsoft
+
+                                    <a href="#"
+                                        class="text-center d-flex align-items-center justify-content-center text-decoration-none mb-3"
+                                        target="_blank">
+                                        <img src="{{ asset('img/auth/facebook.png') }}" alt="facebook-logo" />
+                                        Login With Facebook
                                     </a>
                                     <a href="/auth/linkedin"
                                         class="text-center d-flex align-items-center justify-content-center text-decoration-none mb-3">
@@ -87,7 +89,9 @@
                                             </div>
                                         </div>
                                     </div>
-
+                                    <p class="text-center form-footer mt-5">Forget Password? Click <a
+                                            href="/recruiter/reset-password">Reset Password</a>
+                                    </p>
                                     <div class="form-group">
                                         <div class="d-grid col-12">
                                             <button type="submit" class="btn rounded-0 ">Log
