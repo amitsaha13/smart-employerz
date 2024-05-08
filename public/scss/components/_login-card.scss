@@ -1,16 +1,21 @@
 .login-wrapper {
-  height: calc(100vh - 100px);
+  // height: calc(100vh - 100px);
+  height: 100vh;
   gap: 80px;
   @media(max-width: 991.98px) {
     height: auto;
     gap: 0;
     max-width: 500px;
     margin: 0 auto;
-    width: 100%;
+    width: 100%; 
   }
   .login-card {
-    flex-basis: 40%;
+    flex-basis: 50%;
     flex-grow: 1;
+    padding-left: 80px;
+    @media(max-width: 575.98px) {
+      padding: 0 1rem;
+    }
     .card-header {
       margin-bottom: 70px;
       margin-top: 40px;
@@ -69,12 +74,21 @@
             font-weight: 500;
           }
         }
-      }
+      } 
     }
-  }
+  }  
   .login-image {
-    flex-basis: 60%;
-    flex-grow: 1;
+    flex-basis: 50%;
+    flex-grow: 1; 
+    background-image: url('../../img/auth/login-image.png');
+    background-size: cover;
+    background-repeat: no-repeat;
+    &.reg-image {
+      background-image: url('../../img/auth/reg-image.png');
+    }
+    &.forget-image {
+      background-image: url('../../img/auth/forget-password.png');
+    }
     @media screen and (max-width: 991.98px) {
       display: none;
     }

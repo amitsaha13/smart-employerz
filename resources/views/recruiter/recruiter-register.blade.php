@@ -35,12 +35,13 @@
                         <!-- Registration Form -->
                         <div class="card login-card border-0 bg-transparent">
                             <div class="card-header bg-transparent border-0 p-0">
-                                <a href="./index.html">
+                                <a href="/">
                                     <img src="{{ asset('img/logo/logo.png') }}" alt="logo" class="img-fluid" />
                                 </a>
                             </div>
                             <div class="card-body p-0 h-100">
-                                <form method="post" action="/recruiter/register" id="regForm" autocomplete="off">
+                                <form method="post" action="/recruiter/register/mail-verification" id="regForm"
+                                    autocomplete="off">
                                     @csrf
                                     <!-- Start Step-One -->
                                     <div class="tab">
@@ -60,6 +61,12 @@
                                                 class="text-center d-flex align-items-center justify-content-center text-decoration-none mb-3">
                                                 <img src="{{ asset('img/auth/microsoft.png') }}" alt="microsoft-logo" />
                                                 Login With Microsoft
+                                            </a>
+                                            <a href="#"
+                                                class="text-center d-flex align-items-center justify-content-center text-decoration-none mb-3"
+                                                target="_blank">
+                                                <img src="{{ asset('img/auth/facebook.png') }}" alt="facebook-logo" />
+                                                Login With Facebook
                                             </a>
                                             <a href="/auth/linkedin"
                                                 class="text-center d-flex align-items-center justify-content-center text-decoration-none mb-3">
@@ -138,10 +145,10 @@
                                             <select class="form-select" id="numberOfEmployees"
                                                 aria-label="Default select example" name="employee_count">
                                                 <option selected>Select</option>
-                                                <option value="01-10">01-10</option>
+                                                <option value="1-10">01-10</option>
                                                 <option value="11-25">11-25</option>
                                                 <option value="26-50">26-50</option>
-                                                <option value="51-10">51-100</option>
+                                                <option value="51-100">51-100</option>
                                             </select>
                                         </div>
                                         <div class="form-group custom-select2">

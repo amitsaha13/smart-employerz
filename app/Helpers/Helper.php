@@ -7,29 +7,31 @@ use App\Models\JobSeeker;
 use App\Models\Setting; 
 use App\Models\LoginHistory; 
 use App\Models\GeneralInformation; 
+use Illuminate\Support\Str;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Request;
 
-function generateOTP($length = 6) {
+function generateOTP($length = 5) {
     $min = pow(10, $length - 1); // Minimum value: 100000 for 6 digits
     $max = pow(10, $length) - 1; // Maximum value: 999999 for 6 digits
     return strval(mt_rand($min, $max)); 
 }
 //Calling procedure example: generateOTP();
 
-function storeOTP($user_id, $user_type, $otp_code, $valid_till, $purpose) {
+function storeOTP($user_id, $user_type, $purpose) {
     // Create a new OTP instance and assign values
     $otp = new OTP();
     $otp->user_id = $user_id;
     $otp->user_type = $user_type;
-    $otp->otp_code = $otp_code;
-    $otp->valid_till = $valid_till;
+    $otp->token = Str::uuid();
+    $otp->otp_code = generateOTP(5);
+    $otp->valid_till = now()->addMinutes(5);
     $otp->purpose = $purpose;
     $otp->save();
 
     return $otp;
 }
-//Calling procedure example: storeOTP($user->id, 'recruiter', $otp_code, now()->addMinutes(5), 'Withdrawal');
+//Calling procedure example: storeOTP($user->id, 'recruiter', '0');
 
 function settings($key, $defaultValue = null) {
     $setting = Setting::where('key', $key)->first();
