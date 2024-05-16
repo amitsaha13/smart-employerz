@@ -51,7 +51,7 @@
                                     <p class="mb-0">Input your email address to get OTP to reset password</p>
                                 </div>
 
-                                <form method="GET" action="/recruiter/reset-password/send-otp" autocomplete="off">
+                                <form method="POST" action="/recruiter/reset-password/send-otp" autocomplete="off">
                                     @csrf
                                     <div class="form-group">
                                         <label class="form-label" for="email">Email</label>

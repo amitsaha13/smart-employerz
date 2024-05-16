@@ -26,11 +26,12 @@ Route::middleware(['guest:recruiter'])->group(function () {
     Route::post('/login', [RecruiterAuthController::class, 'login'])->name('recruiter.login');
 
     Route::get('/recruiter/register', [RecruiterAuthController::class, 'showRegistrationForm'])->name('recruiter.register');
+    Route::get('/recruiter/register/get-otp', [RecruiterAuthController::class, 'getOTPVerification'])->name('recruiter.register.getotp');
     Route::post('/recruiter/register/mail-verification', [RecruiterAuthController::class, 'mailVerification'])->name('recruiter.register.mail.verification');
     Route::post('/recruiter/register', [RecruiterAuthController::class, 'register'])->name('recruiter.register');
     
     Route::get('/recruiter/reset-password', [RecruiterAuthController::class, 'getResetPassword'])->name('recruiter.reset.password');
-    Route::get('/recruiter/reset-password/send-otp', [RecruiterAuthController::class, 'resetPasswordSendOTP'])->name('recruiter.reset.password.send.otp');
+    Route::post('/recruiter/reset-password/send-otp', [RecruiterAuthController::class, 'resetPasswordSendOTP'])->name('recruiter.reset.password.send.otp');
     Route::get('/recruiter/reset-password/mail-verification', [RecruiterAuthController::class, 'resetPasswordMailVerification'])->name('recruiter.reset.password.mail.verification');
     
     Route::get('/recruiter/update-password', [RecruiterAuthController::class, 'getUpdatePassword'])->name('recruiter.change.password');
