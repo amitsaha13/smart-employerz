@@ -31,6 +31,7 @@
 
 <body>
     @include('toastr')
+    {{-- @dd(Session::all()); --}}
 
 
     <!-- Start Main Section -->
@@ -52,9 +53,8 @@
                                 </div>
 
                                 <form method="GET" action="/recruiter/reset-password/mail-verification"
-                                    autocomplete="off">
+                                    autocomplete="off" id="verify-otp">
                                     @csrf
-                                    
                                     <div class="form-group">
                                         <fieldset>
                                             <label class="form-label" for="otp">Input OTP</label>
@@ -71,19 +71,17 @@
                                                     class="input" disabled oninput="checkOTP()" />
                                                 <input type="number" name="otp5" maxlength="1" id="otp5"
                                                     class="input" disabled oninput="checkOTP()" />
-
                                             </div>
                                         </fieldset>
                                     </div>
                                     <div class="form-group">
                                         <div class="d-grid col-12">
-
-                                            <button id="timer" class="otp-btn">2.00</button>
+                                            <button id="timer" class="otp-btn">2:00</button>
+                                            <button id="resendButton" type="button" style="display: none;"
+                                                onclick="resendOTP()">Resend OTP</button>
                                             <button id="verifyButton" type="submit" style="display: none;">Verify
                                                 OTP</button>
-
                                         </div>
-
                                     </div>
                                 </form>
                                 <p class="text-center form-footer">Check Email & Input OTP Within 2 minutes
@@ -114,8 +112,111 @@
     <!-- Custom JS -->
     <script src="{{ asset('js/custom.js') }}"></script>
 
+    <script>
+        // Countdown timer for 2 minutes
+        var timeLeft = 10; // 2 minutes in seconds
+        var timerElement = document.getElementById('timer');
+        var otpInputs = document.querySelectorAll('.input');
+        var verifyButton = document.getElementById('verifyButton');
+        var resendButton = document.getElementById('resendButton');
 
+        function countdown() {
+            var minutes = Math.floor(timeLeft / 60);
+            var seconds = timeLeft % 60;
+            timerElement.textContent = minutes + ":" + (seconds < 10 ? "0" : "") + seconds;
+            if (timeLeft === 0) {
+                clearInterval(timerInterval);
+                verifyButton.style.display = 'none';
+                timerElement.style.display = 'none';
+                resendButton.style.display = 'block';
+                resendButton.disabled = false;
+            } else {
+                timeLeft--;
+            }
+        }
 
+        var timerInterval = setInterval(countdown, 1000);
+
+        // Function to check if all OTP inputs are filled
+        function checkOTP() {
+            var allFilled = true;
+            otpInputs.forEach(input => {
+                if (input.value === "") {
+                    allFilled = false;
+                }
+            });
+
+            if (allFilled) {
+                verifyButton.style.display = 'block';
+                verifyButton.disabled = false;
+                // resendButton.style.display = 'none';
+                // resendButton.disabled = true;
+            } else {
+                verifyButton.style.display = 'none';
+                verifyButton.disabled = true;
+            }
+        }
+
+        // Attach input event listeners to OTP inputs
+        otpInputs.forEach(input => {
+            input.addEventListener('input', function() {
+                checkOTP();
+                var nextInput = this.nextElementSibling;
+                if (nextInput && nextInput.classList.contains('input')) {
+                    nextInput.disabled = false;
+                    nextInput.focus();
+                }
+            });
+        });
+
+        // Function to resend OTP
+        function resendOTP() {
+
+            otpInputs.forEach(input => {
+                input.value = ""
+            });
+            // Get the CSRF token from the meta tag
+            const csrfToken = "{{ csrf_token() }}";
+
+            // Make an AJAX request to resend OTP
+            fetch('/recruiter/reset-password/send-otp', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'X-CSRF-TOKEN': csrfToken, // Include CSRF token in the headers
+                    },
+                    body: JSON.stringify({}),
+                })
+                .then(response => {
+                    console.log(response)
+                    if (!response.ok) {
+                        throw new Error('Network response was not ok');
+                    }
+                    // Reset the timer and hide the Resend button
+                    timeLeft = 10; // Resetting timer to 2 minutes
+                    timerElement.textContent = '2:00';
+                    resendButton.style.display = 'none';
+                    timerElement.style.display = 'block';
+                    verifyButton.style.display = 'none';
+                    verifyButton.disabled = true;
+
+                    timerInterval = setInterval(countdown, 1000); // Restart the countdown
+                })
+                .catch(error => {
+                    console.error('There was a problem with the fetch operation:', error);
+                });
+        }
+
+        // Initial setup
+        window.onload = function() {
+            verifyButton.style.display = 'none';
+            resendButton.style.display = 'none';
+            otpInputs.forEach((input, index) => {
+                input.disabled = index !== 0; // Only the first input is enabled initially
+            });
+            countdown(); // Start the countdown on page load
+        }
+    </script>
 </body>
 
 </html>

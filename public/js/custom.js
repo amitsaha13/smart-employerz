@@ -174,7 +174,7 @@ const inputField = document.querySelector(".inputfield");
 
 let inputCount = 0, finalInput = "";
 const updateInputConfig = (element, disabledStatus) => {
-  element.disabled = false;
+  // element.disabled = false;
   // if (!disabledStatus) {
   //   element.focus();
   // } else {
@@ -235,38 +235,42 @@ const startInput = () => {
 window.onload = startInput();
 
 
-// Timer Counter 
-document.addEventListener("DOMContentLoaded", function () {
-  startTimer();
-});
+// Timer Counter
+// document.addEventListener("DOMContentLoaded", function () {
+//   startTimer();
+// });
 
-function startTimer() {
-  var timerElement = document.getElementById("timer");
-  var timeInSeconds = 120; // 2 minutes
+// function startTimer() {
+//   var timerElement = document.getElementById("timer");
+//   var timeInSeconds = 120; // 2 minutes
 
-  function updateTimerDisplay() {
-    var minutes = Math.floor(timeInSeconds / 60);
-    var seconds = timeInSeconds % 60;
+//   function updateTimerDisplay() {
+//     var minutes = Math.floor(timeInSeconds / 60);
+//     var seconds = timeInSeconds % 60;
 
-    // Display the time in the format MM:SS
-    timerElement.textContent = `${String(minutes).padStart(2, "0")}:${String(
-      seconds
-    ).padStart(2, "0")}`;
-  }
+//     // Display the time in the format MM:SS
+//     timerElement.textContent = `${String(minutes).padStart(2, "0")}:${String(
+//       seconds
+//     ).padStart(2, "0")}`;
+//   }
 
-  function handleTimerExpired() {
-    clearInterval(timerInterval);
-    timerElement.textContent = "Resend OTP";
-    document.getElementById("timer").style.backgroundColor = "#00756A";
-    document.getElementById("timer").style.color = "white";
-  }
+//   function handleTimerExpired() {
+//     clearInterval(timerInterval);
+//     timerElement.textContent = "Resend OTP";
+//     document.getElementById("timer").style.backgroundColor = "#00756A";
+//     document.getElementById("timer").style.color = "white";
 
-  var timerInterval = setInterval(function () {
-    if (timeInSeconds > 0) {
-      timeInSeconds--;
-      updateTimerDisplay();
-    } else {
-      handleTimerExpired();
-    }
-  }, 1000);
-}
+//     // Change the action attribute of the form
+//     var form = document.getElementById("verify-otp");
+//     form.action = "/recruiter/reset-password/send-otp";
+//   }
+
+//   var timerInterval = setInterval(function () {
+//     if (timeInSeconds > 0) {
+//       timeInSeconds--;
+//       updateTimerDisplay();
+//     } else {
+//       handleTimerExpired();
+//     }
+//   }, 1000);
+// }

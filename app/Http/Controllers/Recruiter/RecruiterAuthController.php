@@ -61,59 +61,80 @@ class RecruiterAuthController extends Controller
     {
         return view('recruiter.recruiter-register');
     }
+
+    public function getOTPVerification()
+    {
+        return view('verification.otp-verification');
+    }
     public function mailVerification(Request $request)
     {
+        $email = $request->email ?? Session::get('email'); 
+        Session::put('email',$email);
         // Generate OTP and store it in the database
         $otpGeneration = storeOTP(0, 'recruiter', 0);
         // Store requested data in session
-        $request->session()->put('registration_data', $request->all());
+        if (!Session::get('registration_data')) {
+            Session::put('registration_data', $request->all());
+        }
+        Session::put('registration_otp', $otpGeneration);
 
         $customMessage = 'Insert this OTP to verify '.$otpGeneration->otp_code ;
         $toEmail = $request->email;
         $subject = 'Email Verification';
-        Mail::send('emails.my_email', ['subject' => $subject, 'customMessage' => $customMessage], function ($message) use ($toEmail, $subject) {
-            $message->to($toEmail)
-                ->subject($subject);
-        });
+        // Mail::send('emails.my_email', ['subject' => $subject, 'customMessage' => $customMessage], function ($message) use ($toEmail, $subject) {
+        //     $message->to($toEmail)
+        //         ->subject($subject);
+        // });
         return view('verification.otp-verification');
     }
 
     protected function register(Request $request)
     {
         
-        $storedOTP = OTP::where('user_id', 0)
-                ->where('purpose', '0')
-                ->where('user_type', 'recruiter')
-                ->where('valid_till', '>', Carbon::now())
+        $OTP_Details = Session::get('registration_otp');
+        $submittedOTP = "{$request->otp1}{$request->otp2}{$request->otp3}{$request->otp4}{$request->otp5}";
+
+        if (!$OTP_Details) {
+            Session::flash('error', 'Invalid OTP');
+            return view('verification.otp-verification');
+        }
+        if ($OTP_Details->otp_code != $submittedOTP) {
+            Session::flash('error', 'OTP does not match');
+            return view('verification.otp-verification');
+        }
+        if ($OTP_Details->valid_till < Carbon::now()) {
+            Session::flash('error','OTP Expired');
+            return view('verification.otp-verification');
+        }
+
+        $storedOTP = OTP::where('token', $OTP_Details->token)
+                ->where('purpose', '0') // 0 for Registration
                 ->where('is_verified', 0)
-                ->orderBy('id','DESC')
                 ->first();
 
-        $submittedOTP = "{$request->otp1}{$request->otp2}{$request->otp3}{$request->otp4}{$request->otp5}";
-        // dd($storedOTP , $submittedOTP,session('registration_data') );
-        if ($storedOTP && $storedOTP->otp_code == $submittedOTP) {
-            // Retrieve requested data from session
-            $registrationData = session('registration_data');
+        $storedOTP->is_verified = 1;
+        $storedOTP->save();
 
-            // Create a new Recruiter instance and save the data
-            $admin = new Recruiter();
-            $admin->email = $registrationData['email'];
-            $admin->password = Hash::make($registrationData['password']);
-            $admin->mobile = $registrationData['mobile'];
-            $admin->company_name = $registrationData['company_name'];
-            $admin->industry_type = $registrationData['industry_type'];
-            $admin->employee_count = $registrationData['employee_count'];
-            $admin->location = $registrationData['location'];
-            $admin->save();
+        // Retrieve requested data from session
+        $registrationData = session('registration_data');
 
-            // Clear the session data
-            $request->session()->forget('registration_data');
+        // Create a new Recruiter instance and save the data
+        $admin = new Recruiter();
+        $admin->email = $registrationData['email'];
+        $admin->password = Hash::make($registrationData['password']);
+        $admin->mobile = $registrationData['mobile'];
+        $admin->company_name = $registrationData['company_name'];
+        $admin->industry_type = $registrationData['industry_type'];
+        $admin->employee_count = $registrationData['employee_count'];
+        $admin->location = $registrationData['location'];
+        $admin->email_verified_at = Carbon::now();
+        $admin->save();
 
-            return redirect('/')->with('success', 'Registration successful!');
-        } else {
-            // Handle incorrect OTP scenario
-            return redirect('/')->with('error', 'Invalid OTP, please try again.');
-        }
+        // Clear the session data
+        $request->session()->flush();
+
+        return redirect('/')->with('success', 'Registration successful!');
+        
     }
 
     
@@ -256,52 +277,60 @@ class RecruiterAuthController extends Controller
 
     public function resetPasswordSendOTP(Request $request)
     {
-        $emailExists = Recruiter::where('email',$request->email)
+        $email = $request->email ?? Session::get('email'); 
+        Session::put('email',$email);
+
+        $emailExists = Recruiter::where('email',$email)
                 ->whereNotNull('email_verified_at')
                 ->where('status', 1)
                 ->first();
-
         if (!$emailExists) {
             return redirect()->back()->with('error','Email does not exists');
         }
-
         if ($request->session()->has('error')) {
             return view('recruiter.auth.otp-verification');
         }
+
+
         $otpGeneration = storeOTP($emailExists->id, 'recruiter', 1); //1 for Change Password
         $token = $otpGeneration->token ;
-        $request->session()->put('reset_token', $token);
-
+        Session::put('reset_password_data', $otpGeneration);
         $customMessage = 'Insert this OTP to verify '.$otpGeneration->otp_code ;
-        $toEmail = $request->email;
+        $toEmail = $email;
         $subject = 'Email Verification';
         Mail::send('emails.my_email', ['subject' => $subject, 'customMessage' => $customMessage], function ($message) use ($toEmail, $subject) {
             $message->to($toEmail)
                 ->subject($subject);
         });
-
+        
         return view('recruiter.auth.otp-verification');
 
     }
 
     public function resetPasswordMailVerification(Request $request)
     {
-        $storedOTP = OTP::where('token', $request->session()->get('reset_token'))
-                ->where('purpose', '1') // 1 for change password
-                ->where('user_type', 'recruiter')
-                ->where('valid_till', '>', Carbon::now())
-                ->where('is_verified', 0)
-                ->orderBy('id','DESC')
-                ->first();
-        
+        $OTP_Details = Session::get('reset_password_data');
         $submittedOTP = "{$request->otp1}{$request->otp2}{$request->otp3}{$request->otp4}{$request->otp5}";
 
-        if (!$storedOTP){
-            return redirect()->back()->with('error','Invalid OTP');
+        if (!$OTP_Details) {
+            Session::flash('error', 'Invalid OTP');
+            return view('recruiter.auth.otp-verification');
         }
-        if ($storedOTP->otp_code != $submittedOTP) {
-            return redirect()->back()->with('error','OTP does not match');
+        if ($OTP_Details->otp_code != $submittedOTP) {
+            Session::flash('error', 'OTP does not match');
+
+            return view('recruiter.auth.otp-verification');
         }
+        if ($OTP_Details->valid_till < Carbon::now()) {
+            Session::flash('error','OTP Expired');
+            return view('recruiter.auth.otp-verification');
+        }
+
+        $storedOTP = OTP::where('token', $OTP_Details->token)
+                ->where('purpose', '1') // 1 for change password
+                ->where('user_id', $OTP_Details->user_id)
+                ->where('is_verified', 0)
+                ->first();
 
         $storedOTP->is_verified = 1;
         $storedOTP->save();
@@ -317,16 +346,16 @@ class RecruiterAuthController extends Controller
 
     public function passwordUpdate(Request $request)
     {
-        $storedOTP = OTP::where('token', $request->session()->get('reset_token'))
-                ->where('purpose', '1') // 1 for change password
-                ->where('user_type', 'recruiter')
-                ->where('is_verified', 1)
-                ->orderBy('id','DESC')
-                ->first();
-        // dd($request->all(), $storedOTP);
-        $update = Recruiter::where('id',$storedOTP->user_id)->update(['password' =>Hash::make($request->password)]);
-        // dd($update);
-        return view('recruiter.auth.set-new-password')->with('success','Password updated successfully');
+        $user_id = Session::get('reset_password_data')->user_id;
+        $email = Session::get('email');
+
+        $recruiter = Recruiter::find($user_id);
+        $recruiter->password = Hash::make($request->password);
+        $recruiter->save();
+
+        Session::forget(['reset_password_data', 'email']);
+
+        return redirect('/')->with('success','Password updated successfully');
         
     }
 }
