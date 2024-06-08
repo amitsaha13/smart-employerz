@@ -65,6 +65,12 @@ Route::middleware(['auth:recruiter'])->group(function () {
     // Temporary 
     Route::get('/create-job', [JobSeekerManagementController::class, 'createJob']);
     Route::get('/logout', [RecruiterAuthController::class, 'logout']);
+
+
+    //Sazzad vai front end
+    Route::get('/demo',function(){
+        return view('recruiter.sazzad.demo');
+    });
 });
 
 
@@ -73,6 +79,7 @@ Route::get('/apply-job', [JobApplicationController::class, 'applyJob']);
 Route::post('/parse-cv', [JobApplicationController::class, 'storeCV']);
 Route::get('/fetch-job-description', [JobCircularController::class, 'fetchJobDetailsByAI']);
 Route::post('/fetch-job-details', [JobCircularController::class, 'fetchJobDetailsByAI']);
+
 
 
 
