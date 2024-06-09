@@ -378,6 +378,12 @@ class JobCircularController extends Controller
 
         return null;
     }
+
+    // Get All Jobs
+    public function getAllJobs()
+    {
+        return view('recruiter.all-jobs');
+    }
     
     
 }

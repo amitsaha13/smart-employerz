@@ -25,7 +25,7 @@
     <link rel="stylesheet" href="{{ asset('css/style.css') }}" />
 
     <title>
-        smartemployerz
+        Login | {{ config('app.name') }}
     </title>
 
 </head>

@@ -57,6 +57,9 @@ Route::middleware(['auth:recruiter'])->group(function () {
     Route::get('/create-new-job', [JobCircularController::class, 'index'])->name('create.new.job');
     Route::post('/create-new-job', [JobCircularController::class, 'postCreateNewJob'])->name('create.new.job');
     
+    // All Jobs
+    Route::get('/recruiter/all-jobs', [JobCircularController::class, 'getAllJobs']);
+    Route::get('/recruiter/all-applicants', [JobSeekerManagementController::class, 'getAllApplicants']);
 
 
     Route::get('/send-mail', [JobSeekerManagementController::class, 'sendIndividualEmailToJobSeeker']);

@@ -11,6 +11,11 @@ use Illuminate\Support\Str;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Request;
 
+use Illuminate\Support\Facades\Storage;
+use Monolog\Logger;
+use Monolog\Handler\StreamHandler;
+
+
 function generateOTP($length = 5) {
     $min = pow(10, $length - 1); // Minimum value: 100000 for 6 digits
     $max = pow(10, $length) - 1; // Maximum value: 999999 for 6 digits
@@ -100,6 +105,38 @@ function numberToWord($number) {
         return $tens[floor($number / 10)] . ' ' . $words[$number % 10];
     } else {
         return 'Number out of range';
+    }
+}
+
+function LogErrors($exception)
+{
+    try {
+        $logs = [
+            'error' => $exception->getMessage(),
+            'line' => $exception->getLine(),
+            'file' => $exception->getFile(),
+        ];
+        $currentMonthYear = Carbon::now()->format('Y-m');
+        
+        //Public Path
+        // $logFilePath = public_path('logs/Errors/'.$currentMonthYear.'.log');
+    
+        //Storage Path
+        $logFilePath = storage_path('logs/Errors/'.$currentMonthYear.'.log');
+    
+        // Ensure the directory exists
+        $logDirectory = dirname($logFilePath);
+        if (!is_dir($logDirectory)) {
+            mkdir($logDirectory, 0755, true);
+        }
+    
+        $writeLog = new Logger('SE');
+        $writeLog->pushHandler(new StreamHandler($logFilePath, Logger::ERROR));
+        $writeLog->error('SE Log', $logs);
+    
+        return true;
+    } catch (\Throwable $th) {
+        return view('400');
     }
 }
        
