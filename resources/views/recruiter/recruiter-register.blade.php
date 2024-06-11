@@ -22,7 +22,7 @@
     <!-- Custom CSS -->
     <link rel="stylesheet" href="{{ asset('css/style.css') }}" />
 
-    <title>smartemployerz</title>
+    <title>Register | {{ config('app.name') }}</title>
 </head>
 
 <body>

@@ -1,5 +1,5 @@
 @extends('layouts.recruiter_layout')
-<title>Create New Job | Smartemployerz</title>
+<title>Create New Job | {{ config('app.name') }}</title>
 
 @section('content')
 <!-- Start Main Section -->

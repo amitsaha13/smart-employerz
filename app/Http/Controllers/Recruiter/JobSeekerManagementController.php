@@ -14,21 +14,42 @@ use DB;
 
 class JobSeekerManagementController extends Controller
 {
+    // Get All Applicants
+    public function getAllApplicants()
+    {
+        try {
+            return view('recruiter.all-applicants');
+        } catch (\Throwable $th) {
+            LogErrors($th);
+            return view('400');
+        }
+    }
     
     public function sendIndividualEmailToJobSeeker(Request $request, $jobSeekerId = 1)
     {
-        $jobSeeker = JobSeeker::findOrFail($jobSeekerId); // Fetch the specific job seeker
-        Mail::to($jobSeeker->email)->send(new SendOTPMail($jobSeeker));
-        return redirect()->back()->with('info', 'Email sent to the job seeker.');
+        try {
+            $jobSeeker = JobSeeker::findOrFail($jobSeekerId); // Fetch the specific job seeker
+            Mail::to($jobSeeker->email)->send(new SendOTPMail($jobSeeker));
+            return redirect()->back()->with('info', 'Email sent to the job seeker.');
+        } catch (\Throwable $th) {
+            LogErrors($th);
+            return view('400');
+        }
     }
 
     public function sendBulkEmailToJobSeekers(Request $request)
     {
-        $jobSeekers = JobSeeker::all(); // Retrieve job seekers from database
-        foreach ($jobSeekers as $jobSeeker) {
-            Mail::to($jobSeeker->email)->queue(new JobSeekerMail($jobSeeker));
+        try {
+            $jobSeekers = JobSeeker::all(); // Retrieve job seekers from database
+            foreach ($jobSeekers as $jobSeeker) {
+                Mail::to($jobSeeker->email)->queue(new JobSeekerMail($jobSeeker));
+            }
+            return redirect()->back()->with('info', 'Bulk emails queued for sending.');
+
+        } catch (\Throwable $th) {
+            LogErrors($th);
+            return view('400');
         }
-        return redirect()->back()->with('info', 'Bulk emails queued for sending.');
     }
 
     // public function fetchJobDetailsByAI()
@@ -64,7 +85,12 @@ class JobSeekerManagementController extends Controller
     
     public function createJob()
     {
-        return view('recruiter.create-job');
+        try {
+            return view('recruiter.create-job');
+        } catch (\Throwable $th) {
+            LogErrors($th);
+            return view('400');
+        }
     }
 
     
