@@ -77,7 +77,7 @@ Route::middleware(['auth:recruiter'])->group(function () {
 });
 
 
-Route::get('/apply-job', [JobApplicationController::class, 'applyJob']);
+Route::get('/js/apply-job/{job}', [JobApplicationController::class, 'applyJob']);
 
 Route::post('/parse-cv', [JobApplicationController::class, 'storeCV']);
 Route::get('/fetch-job-description', [JobCircularController::class, 'fetchJobDetailsByAI']);

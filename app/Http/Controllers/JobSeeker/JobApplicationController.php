@@ -14,7 +14,7 @@ use Str;
 
 class JobApplicationController extends Controller
 {
-    public function applyJob()
+    public function applyJob($job)
     {
         $brand = generalInformation('brand');
         $website = generalInformation('website');

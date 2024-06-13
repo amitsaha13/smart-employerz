@@ -132,7 +132,7 @@
                                             stroke-linecap="round" stroke-linejoin="round" />
                                     </svg>
 
-                                    <img src="./img/avatar.png" class="img-fluid" alt="avatar" />
+                                    <img src="{{asset('img/avatar.png')}}" class="img-fluid" alt="avatar" />
                                 </div>
                             </div>
                         </div>

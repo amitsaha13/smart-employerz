@@ -139,4 +139,14 @@ function LogErrors($exception)
         return view('400');
     }
 }
-       
+
+function calculateAge($dateOfBirth) {
+    // Create a DateTime object from the date of birth
+    $dob = new DateTime($dateOfBirth);
+    // Get the current date
+    $now = new DateTime();
+    // Calculate the difference between the current date and the date of birth
+    $age = $now->diff($dob);
+    // Return the age in years
+    return $age->y;
+}

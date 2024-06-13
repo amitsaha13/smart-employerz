@@ -4,12 +4,16 @@ namespace App\Http\Controllers\Recruiter;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
-use App\Models\JobSeeker;
-use Illuminate\Support\Facades\Mail;
-use Illuminate\Support\Facades\Auth;
 use App\Mail\JobSeekerMail;
 use App\Mail\SendOTPMail;
-use DB;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Mail;
+use Illuminate\Support\Facades\Auth;
+use App\Models\Job;
+use App\Models\Recruiter;
+use App\Models\JobSeeker;
+use App\Models\JobApplication;
+
 
 
 class JobSeekerManagementController extends Controller
@@ -18,7 +22,29 @@ class JobSeekerManagementController extends Controller
     public function getAllApplicants()
     {
         try {
-            return view('recruiter.all-applicants');
+            $recruiterId = Auth::guard('recruiter')->user()->id;
+
+            // Fetch the recruiter with jobs and job applications
+           // Fetch all jobs for the recruiter
+            $jobIds = Job::where('recruiter_id', $recruiterId)->pluck('id');
+
+            // Fetch all job applications for those jobs
+            $allJobApplications = JobApplication::whereIn('job_id', $jobIds)->with('job')->get();
+            // foreach ($allJobs as $key => $allJob) {
+            //     dd($allJob->jobApplications);
+            // }
+            // dd($allJobApplications);
+
+
+            // // Flatten the job applications collection, including job information
+            // $jobApplications = $recruiter->jobs->flatMap(function ($job) {
+            //     return $job->jobApplications->map(function ($jobApplication) use ($job) {
+            //         $jobApplication->job = $job;
+            //         return $jobApplication;
+            //     });
+            // });
+            // dd($jobApplications);
+            return view('recruiter.all-applicants', compact('allJobApplications'));
         } catch (\Throwable $th) {
             LogErrors($th);
             return view('400');
