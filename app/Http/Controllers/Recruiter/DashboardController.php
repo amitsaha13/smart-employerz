@@ -26,7 +26,7 @@ class DashboardController extends Controller
             return view('recruiter.recruiter-dashboard',compact('user','jobCounts'));
         } catch (\Throwable $th) {
             LogErrors($th);
-            return view('400')->with('error','Something went wrong');
+            return view('400');
         }
     }
 }
