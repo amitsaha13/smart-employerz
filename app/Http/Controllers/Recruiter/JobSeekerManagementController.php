@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Recruiter;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
+use Carbon\Carbon;
 use App\Mail\JobSeekerMail;
 use App\Mail\SendOTPMail;
 use Illuminate\Support\Facades\DB;
@@ -24,32 +25,100 @@ class JobSeekerManagementController extends Controller
         try {
             $recruiterId = Auth::guard('recruiter')->user()->id;
 
-            // Fetch the recruiter with jobs and job applications
-           // Fetch all jobs for the recruiter
-            $jobIds = Job::where('recruiter_id', $recruiterId)->pluck('id');
+            // Fetch all jobs for the recruiter
+            $jobs = Job::where('recruiter_id', $recruiterId)
+                    ->where('deadline', '>',  Carbon::now())
+                    ->select('id','job_title')->get();
 
+            $jobIds = $jobs->pluck('id');
             // Fetch all job applications for those jobs
             $allJobApplications = JobApplication::whereIn('job_id', $jobIds)->with('job')->get();
-            // foreach ($allJobs as $key => $allJob) {
-            //     dd($allJob->jobApplications);
-            // }
-            // dd($allJobApplications);
+            foreach ($allJobApplications as $application) {
+                $application->current_job_detail = json_decode($application->current_job_detail);
+                // Calculate the experience duration
+                $startDate = Carbon::parse($application->current_job_detail->start_date);
+                $currentDate = Carbon::now();
+                $diff = $currentDate->diff($startDate);
+                $years = $diff->y;
+                $months = $diff->m;
+                // Format the experience duration
+                if ($years > 0) {
+                    $experienceDuration = $years . ' yr' . ($years > 1 ? 's' : '') . ' ' . $months . ' mo';
+                } else {
+                    $experienceDuration = $months . ' mo';
+                }
+                
+                $application->current_job_detail->start_date = $experienceDuration;
+            }
 
-
-            // // Flatten the job applications collection, including job information
-            // $jobApplications = $recruiter->jobs->flatMap(function ($job) {
-            //     return $job->jobApplications->map(function ($jobApplication) use ($job) {
-            //         $jobApplication->job = $job;
-            //         return $jobApplication;
-            //     });
-            // });
-            // dd($jobApplications);
-            return view('recruiter.all-applicants', compact('allJobApplications'));
+            return view('recruiter.all-applicants', compact('allJobApplications','jobs'));
         } catch (\Throwable $th) {
             LogErrors($th);
             return view('400');
         }
     }
+
+    public function filterApplicants(Request $request)
+    {
+        try {
+            $recruiterId = Auth::guard('recruiter')->user()->id;
+            
+            // Fetch all jobs for the recruiter
+            $jobs = Job::where('recruiter_id', $recruiterId)
+                    ->where('deadline', '>',  Carbon::now())
+                    ->select('id', 'job_title')->get();
+
+            $jobIds = $jobs->pluck('id');
+            
+            // Build the query for job applications
+            $query = JobApplication::whereIn('job_id', $jobIds)->with('job');
+            
+            // Apply filters
+            if ($request->has('job_id') && !empty($request->job_id)) {
+                $query->where('job_id', $request->job_id);
+            }
+
+            if ($request->has('search') && !empty($request->search)) {
+                $query->where(function ($q) use ($request) {
+                    $q->where('first_name', 'LIKE', '%' . $request->search . '%')
+                      ->orWhere('last_name', 'LIKE', '%' . $request->search . '%')
+                      ->orWhere('current_address', 'LIKE', '%' . $request->search . '%')
+                      ->orWhere('expected_salary', 'LIKE', '%' . $request->search . '%')
+                      ->orWhere(DB::raw("JSON_UNQUOTE(JSON_EXTRACT(current_job_detail, '$.designation'))"), 'LIKE', '%' . $request->search . '%')
+                      ->orWhere(DB::raw("JSON_UNQUOTE(JSON_EXTRACT(current_job_detail, '$.company'))"), 'LIKE', '%' . $request->search . '%')
+                      ->orWhereHas('job', function ($q) use ($request) {
+                          $q->where('job_title', 'LIKE', '%' . $request->search . '%');
+                      });
+                });
+            }
+            
+            
+            
+            // Fetch filtered job applications
+            $allJobApplications = $query->get();
+            
+            // Process each application
+            foreach ($allJobApplications as $application) {
+                $application->current_job_detail = json_decode($application->current_job_detail);
+                $startDate = Carbon::parse($application->current_job_detail->start_date);
+                $currentDate = Carbon::now();
+                $diff = $currentDate->diff($startDate);
+                $years = $diff->y;
+                $months = $diff->m;
+                $experienceDuration = $years > 0 
+                    ? "{$years} year" . ($years > 1 ? 's' : '') . " {$months} mo" 
+                    : "{$months} mo";
+                $application->current_job_detail->experienceDuration = $experienceDuration;
+            }
+            
+            // Return JSON response
+            return response()->json($allJobApplications);
+        } catch (\Throwable $th) {
+            LogErrors($th);
+            return view('400');
+        }
+    }
+
     
     public function sendIndividualEmailToJobSeeker(Request $request, $jobSeekerId = 1)
     {
