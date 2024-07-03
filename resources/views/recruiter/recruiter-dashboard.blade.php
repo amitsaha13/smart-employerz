@@ -112,7 +112,7 @@
             <div class="row no-gutters">
                 <div class="col-md-12">
                     <div class="applicants-bar">
-                        <h3>Recent Applicants <span>100</span></h3>
+                        <h3>Recent Applicants <span>{{$totalApplicants}}</span></h3>
                         <a href="/recruiter/all-applicants" class="text-decoration-none">See All
                             <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 20 20"
                                 fill="none">
@@ -126,76 +126,24 @@
                         <div class="row">
                             <div class="col-md-12">
                                 <div class="applicants-wrapper">
-                                    <a href="#" class="text-decoration-none">
-                                        <div class="card">
-                                            <div class="card-body">
-                                                <div class="applicants-image">
-                                                    <img src="{{ asset('img/dashboard/applicants/applicants-1.png') }}"
-                                                        alt="Applicants - 1" class="img-fluid" />
-                                                </div>
-                                                <div class="details">
-                                                    <h3>Jason Ruly</h3>
-                                                    <span>UI/UX Designer</span>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </a>
-                                    <a href="#" class="text-decoration-none">
-                                        <div class="card">
-                                            <div class="card-body">
-                                                <div class="applicants-image">
-                                                    <img src="{{ asset('img/dashboard/applicants/applicants-2.png') }}"
-                                                        alt="Applicants - 2" class="img-fluid" />
-                                                </div>
-                                                <div class="details">
-                                                    <h3>Jason Ruly</h3>
-                                                    <span>UI/UX Designer</span>
+                                    @foreach ($recentJobApplications as $application)
+                                        <a href="#" class="text-decoration-none">
+                                            <div class="card">
+                                                <div class="card-body">
+                                                    <div class="applicants-image">
+                                                        <img src="{{ $application->profile_image }}"
+                                                            alt="{{ $application->first_name }} Image"
+                                                            class="img-fluid" />
+                                                    </div>
+                                                    <div class="details">
+                                                        <h3>{{ $application->first_name }} {{ $application->last_name }}
+                                                        </h3>
+                                                        <span>{{ $application->current_job_detail->designation }}</span>
+                                                    </div>
                                                 </div>
                                             </div>
-                                        </div>
-                                    </a>
-                                    <a href="#" class="text-decoration-none">
-                                        <div class="card">
-                                            <div class="card-body">
-                                                <div class="applicants-image">
-                                                    <img src="{{ asset('img/dashboard/applicants/applicants-3.png') }}"
-                                                        alt="Applicants - 3" class="img-fluid" />
-                                                </div>
-                                                <div class="details">
-                                                    <h3>Jason Ruly</h3>
-                                                    <span>UI/UX Designer</span>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </a>
-                                    <a href="#" class="text-decoration-none">
-                                        <div class="card">
-                                            <div class="card-body">
-                                                <div class="applicants-image">
-                                                    <img src="{{ asset('img/dashboard/applicants/applicants-4.png') }}"
-                                                        alt="Applicants - 4" class="img-fluid" />
-                                                </div>
-                                                <div class="details">
-                                                    <h3>Jason Ruly</h3>
-                                                    <span>UI/UX Designer</span>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </a>
-                                    <a href="#" class="text-decoration-none">
-                                        <div class="card">
-                                            <div class="card-body">
-                                                <div class="applicants-image">
-                                                    <img src="{{ asset('img/dashboard/applicants/applicants-5.png') }}"
-                                                        alt="Applicants - 5" class="img-fluid" />
-                                                </div>
-                                                <div class="details">
-                                                    <h3>Jason Ruly</h3>
-                                                    <span>UI/UX Designer</span>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </a>
+                                        </a>
+                                    @endforeach
                                 </div>
                             </div>
                         </div>
@@ -1231,18 +1179,15 @@
                                                                     <path
                                                                         d="M15 6.66797C16.3807 6.66797 17.5 5.54868 17.5 4.16797C17.5 2.78726 16.3807 1.66797 15 1.66797C13.6193 1.66797 12.5 2.78726 12.5 4.16797C12.5 5.54868 13.6193 6.66797 15 6.66797Z"
                                                                         stroke="#667085" stroke-width="1.67"
-                                                                        stroke-linecap="round"
-                                                                        stroke-linejoin="round" />
+                                                                        stroke-linecap="round" stroke-linejoin="round" />
                                                                     <path
                                                                         d="M5 12.5C6.38071 12.5 7.5 11.3807 7.5 10C7.5 8.61929 6.38071 7.5 5 7.5C3.61929 7.5 2.5 8.61929 2.5 10C2.5 11.3807 3.61929 12.5 5 12.5Z"
                                                                         stroke="#667085" stroke-width="1.67"
-                                                                        stroke-linecap="round"
-                                                                        stroke-linejoin="round" />
+                                                                        stroke-linecap="round" stroke-linejoin="round" />
                                                                     <path
                                                                         d="M15 18.332C16.3807 18.332 17.5 17.2127 17.5 15.832C17.5 14.4513 16.3807 13.332 15 13.332C13.6193 13.332 12.5 14.4513 12.5 15.832C12.5 17.2127 13.6193 18.332 15 18.332Z"
                                                                         stroke="#667085" stroke-width="1.67"
-                                                                        stroke-linecap="round"
-                                                                        stroke-linejoin="round" />
+                                                                        stroke-linecap="round" stroke-linejoin="round" />
                                                                     <path d="M7.16016 11.2578L12.8518 14.5745"
                                                                         stroke="#667085" stroke-width="1.67"
                                                                         stroke-linecap="round"

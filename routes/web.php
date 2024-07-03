@@ -44,10 +44,19 @@ Route::middleware(['guest:recruiter'])->group(function () {
     //Authentication routes for Linkedin
     Route::get('/auth/linkedin',[RecruiterAuthController::class, 'redirectToLinkedIn'])->name('auth.linkedin');
     Route::get('/auth/linkedin/callback',[RecruiterAuthController::class, 'handleLinkedInCallback'] );
-    
+
+    //Authentication routes for Facebook
+    Route::get('/auth/facebook',[RecruiterAuthController::class, 'redirectToFacebook'])->name('auth.facebook');
+    Route::get('/auth/facebook/callback',[RecruiterAuthController::class, 'handleFacebookCallback'] );
+
+
     //Authentication routes for Microsoft
     Route::get('/auth/microsoft',[RecruiterAuthController::class, 'redirectToMicrosoft'])->name('auth.microsoft');
     Route::get('/auth/microsoft/callback',[RecruiterAuthController::class, 'handleMicrosoftCallback'] );
+
+
+    Route::get('/delete/profile', [RecruiterAuthController::class, 'deleteProfile']);
+
 
 });
 
@@ -60,6 +69,7 @@ Route::middleware(['auth:recruiter'])->group(function () {
     // All Jobs
     Route::get('/recruiter/all-jobs', [JobCircularController::class, 'getAllJobs']);
     Route::get('/recruiter/all-applicants', [JobSeekerManagementController::class, 'getAllApplicants']);
+    Route::get('/recruiter/applicants/filter', [JobSeekerManagementController::class, 'filterApplicants'])->name('recruiter.filter.applicants');
 
 
     Route::get('/send-mail', [JobSeekerManagementController::class, 'sendIndividualEmailToJobSeeker']);
@@ -68,6 +78,7 @@ Route::middleware(['auth:recruiter'])->group(function () {
     // Temporary 
     Route::get('/create-job', [JobSeekerManagementController::class, 'createJob']);
     Route::get('/logout', [RecruiterAuthController::class, 'logout']);
+
 
 
     //Sazzad vai front end

@@ -243,7 +243,7 @@ class RecruiterAuthController extends Controller
     public function redirectToLinkedIn()
     {
         try {
-            return Socialite::driver('linkedin')->redirect();
+            return Socialite::driver('linkedin-openid')->redirect();
         } catch (\Throwable $th) {
             LogErrors($th);
             return view('400');
@@ -253,7 +253,7 @@ class RecruiterAuthController extends Controller
     public function handleLinkedInCallback(Request $request)
     {
         try {
-            $linkedinUser = Socialite::driver('linkedin')->user();
+            $linkedinUser = Socialite::driver('linkedin-openid')->user();
     
             // Check if a user with this LinkedIn ID exists in your database
             $user = Recruiter::where('linkedin_id', $linkedinUser->getId())->first();
@@ -285,7 +285,51 @@ class RecruiterAuthController extends Controller
         }
     }
     
+    //Authentication routes for Facebook
+    public function redirectToFacebook()
+    {
+        try {
+            return Socialite::driver('facebook')->redirect();
+        } catch (\Throwable $th) {
+            LogErrors($th);
+            return view('400');
+        }
+    }
 
+    public function handleFacebookCallback(Request $request)
+    {
+        try {
+            $facebookUser = Socialite::driver('facebook')->user();
+
+            // Check if a user with this facebook ID exists in your database
+            $user = Recruiter::where('facebook_id', $facebookUser->getId())->first();
+
+            if (!$user) {
+                // User doesn't exist, create a new one
+                $user = new Recruiter();
+                $user->company_name = $facebookUser->getName();
+                $user->email = $facebookUser->getEmail();
+                $user->facebook_id = $facebookUser->getId();
+                // Add other necessary fields
+                $user->mobile = '-';
+                $user->industry_type = '-';
+                $user->employee_count = '1-10';
+                $user->location = '-';
+                $user->status = '1';
+                
+                $user->save();
+            }
+
+            // Log the user in
+            Auth::guard('recruiter')->login($user);
+            insertLoginHistory($this->guard);
+
+            return redirect('/recruiter/dashboard');
+        } catch (\Throwable $th) {
+            LogErrors($th);
+            return view('400');
+        }
+    }
     //Authentication routes for Microsoft
     public function redirectToMicrosoft()
     {
@@ -445,6 +489,17 @@ class RecruiterAuthController extends Controller
             return view('400');
         }
         
+    }
+
+
+    public function deleteProfile()
+    {
+        try {
+            return true;
+        } catch (\Throwable $th) {
+            LogErrors($th);
+            return view('400');
+        }
     }
 }
 

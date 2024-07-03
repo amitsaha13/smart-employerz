@@ -58,7 +58,7 @@
                                         Login With Google
                                     </a>
 
-                                    <a href="#"
+                                    <a href="/auth/facebook"
                                         class="text-center d-flex align-items-center justify-content-center text-decoration-none mb-3"
                                         target="_blank">
                                         <img src="{{ asset('img/auth/facebook.png') }}" alt="facebook-logo" />
