@@ -79,7 +79,9 @@ Route::middleware(['auth:recruiter'])->group(function () {
     Route::get('/create-job', [JobSeekerManagementController::class, 'createJob']);
     Route::get('/logout', [RecruiterAuthController::class, 'logout']);
 
-
+    Route::get('/job-schedule',function(){
+        return view('recruiter.sazzad.job-schedule');
+    });
 
     //Sazzad vai front end
     Route::get('/demo',function(){
