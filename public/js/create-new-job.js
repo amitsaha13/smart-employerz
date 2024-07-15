@@ -93,6 +93,27 @@ $(document).ready(function () {
         $("#age_preview").text($("#min_age").val() + ' - ' + $("#max_age").val() + ' Years');
         $("#workplace_preview").text($("#workplace option:selected").text());
 
+
+
     });
 
+});
+
+
+document.addEventListener('DOMContentLoaded', function () {
+    function submitForm(action) {
+        document.getElementById('jobType').value = action;
+        console.log(document.getElementById('publish_date_preview').value);
+        document.getElementById('publish_date').value = document.getElementById('publish_date_preview').value;
+        document.getElementById('deadline').value = document.getElementById('deadline_preview').value;
+        document.getElementById('createNewJobForm').submit();
+    }
+
+    document.getElementById('schedule_for_later').onclick = function () {
+        submitForm('schedule_for_later');
+    };
+
+    document.getElementById('publish_now').onclick = function () {
+        submitForm('publish_now');
+    };
 });

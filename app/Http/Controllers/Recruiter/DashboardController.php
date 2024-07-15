@@ -7,7 +7,8 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Carbon\Carbon;
-use App\Models\Job;
+use App\Models\Job; 
+use App\Models\DraftJob; 
 use App\Models\JobApplication;
 
 class DashboardController extends Controller
@@ -21,11 +22,13 @@ class DashboardController extends Controller
             $jobCounts = Job::where('recruiter_id', $recruiterId)
                         ->select(
                             DB::raw('SUM(CASE WHEN status = 1 AND deadline > NOW() THEN 1 ELSE 0 END) as active_count'),
-                            DB::raw('SUM(CASE WHEN status = 0 THEN 1 ELSE 0 END) as pending_count'),
-                            DB::raw('SUM(CASE WHEN deadline < NOW() THEN 1 ELSE 0 END) as expired_count'),
-                            DB::raw('SUM(CASE WHEN status = 2 THEN 1 ELSE 0 END) as draft_count')
+                            DB::raw('SUM(CASE WHEN status = 0 AND deadline > NOW() THEN 1 ELSE 0 END) as pending_count'),
+                            DB::raw('SUM(CASE WHEN deadline < NOW() THEN 1 ELSE 0 END) as expired_count')
+                            // DB::raw('SUM(CASE WHEN status = 2 THEN 1 ELSE 0 END) as draft_count')
                         )
                         ->first();
+
+            $jobCounts->draft_count = DraftJob::where('recruiter_id', $recruiterId)->count();
             
             // Recent Applicants
             $jobs = Job::where('recruiter_id', $recruiterId)

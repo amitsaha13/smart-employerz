@@ -9,8 +9,11 @@
 
 
         <!-- Start New Job Form -->
-        <form action="{{ route('create.new.job') }}" method="post" class="create-new-job-form form" id="msform">
+        <form action="{{ route('create.new.job') }}" method="post" class="create-new-job-form form" id="createNewJobForm">
             @csrf
+            <input type="hidden" name="jobType" id="jobType" value="{{ old('jobType') }}">
+            <input type="hidden" name="publish_date" id="publish_date" value="{{ old('publish_date') }}">
+            <input type="hidden" name="deadline" id="deadline" value="{{ old('deadline') }}">
             <div class="steper-wrapper">
                 <div class="row">
                     <div class="col-xl-12">
@@ -32,44 +35,59 @@
                                 <div class="form-group mx-md-4">
                                     <label for="jobTitle" class="form-label">Job Title</label>
                                     <input type="text" class="form-control" id="jobTitle" aria-describedby="jobTitle"
-                                        name="job_title" required />
+                                        name="job_title" value="{{ old('job_title') }}" />
+                                    @if ($errors->has('job_title'))
+                                        <span class="text-danger">{{ $errors->first('job_title') }}</span>
+                                    @endif
                                 </div>
                             </div>
                             <div class="col-md-6">
                                 <div class="form-group ms-md-4">
-                                    <label class="form-label" for="jobLevel">Job
-                                        Level</label>
-                                    <select class="form-select" name="job_level" id="job_level"
-                                        aria-label="Default select example" required>
-                                        <option value="1" selected>Entry Level</option>
-                                        <option value="2">Intermediate Level</option>
-                                        <option value="3">Advanced Level</option>
+                                    <label class="form-label" for="jobLevel">Job Level</label>
+                                    <select class="form-select" name="job_level" id="job_level">
+                                        <option value="" selected>Select Job Lavel</option>
+                                        <option value="1" {{ old('job_level') == 1 ? 'selected' : '' }}>Entry Level
+                                        </option>
+                                        <option value="2" {{ old('job_level') == 2 ? 'selected' : '' }}>Intermediate
+                                            Level</option>
+                                        <option value="3" {{ old('job_level') == 3 ? 'selected' : '' }}>Advanced Level
+                                        </option>
                                     </select>
+                                    @if ($errors->has('job_level'))
+                                        <span class="text-danger">{{ $errors->first('job_level') }}</span>
+                                    @endif
                                 </div>
                             </div>
                             <div class="col-md-6">
                                 <div class="form-group me-md-4">
-                                    <label class="form-label" for="numberOfEmployees">Year of
-                                        Experience (e.g.: 1-2 Years)</label>
+                                    <label class="form-label" for="numberOfEmployees">Year of Experience (e.g.: 1-2
+                                        Years)</label>
                                     <div class="d-flex gap-3">
-                                        <select class="form-select" name="min_experience" id="min_experience"
-                                            aria-label="Default select example" required>
-                                            <option value="" selected>Min</option>
+                                        <select class="form-select" name="min_experience" id="min_experience" required>
+                                            <option value="" {{ old('min_experience') == '' ? 'selected' : '' }}>Min
+                                            </option>
                                             @for ($i = 0; $i <= settings('MAX_EXPERIENCE'); $i++)
-                                                <option value="{{ $i }}">
+                                                <option value="{{ $i }}"
+                                                    {{ old('min_experience') == $i ? 'selected' : '' }}>
                                                     {{ numberToWord($i) }}</option>
                                             @endfor
-
                                         </select>
-                                        <select class="form-select" name="max_experience" id="max_experience"
-                                            aria-label="Default select example" required>
-                                            <option value="" selected>Max</option>
+                                        <select class="form-select" name="max_experience" id="max_experience" required>
+                                            <option value="" {{ old('max_experience') == '' ? 'selected' : '' }}>Max
+                                            </option>
                                             @for ($i = 1; $i <= settings('MAX_EXPERIENCE'); $i++)
-                                                <option value="{{ $i }}">
+                                                <option value="{{ $i }}"
+                                                    {{ old('max_experience') == $i ? 'selected' : '' }}>
                                                     {{ numberToWord($i) }}</option>
                                             @endfor
                                         </select>
                                     </div>
+                                    @if ($errors->has('min_experience'))
+                                        <span class="text-danger">{{ $errors->first('min_experience') }}</span>
+                                    @endif
+                                    @if ($errors->has('max_experience'))
+                                        <span class="text-danger">{{ $errors->first('max_experience') }}</span>
+                                    @endif
                                 </div>
                             </div>
                         </div>
@@ -99,8 +117,11 @@
                                     <label for="floatingTextarea" class="form-label">Job
                                         Description</label>
                                     <div class="form-floating">
-                                        <textarea class="form-control" name="job_description" id="jobDescription" required>Descriptions</textarea>
+                                        <textarea class="form-control" name="job_description" id="jobDescription" required>{{ old('job_description') }}</textarea>
                                     </div>
+                                    @if ($errors->has('job_description'))
+                                        <span class="text-danger">{{ $errors->first('job_description') }}</span>
+                                    @endif
                                     <div class="form-text">275 characters left</div>
                                 </div>
                             </div>
@@ -110,9 +131,12 @@
                                 <div class="form-group mx-md-4">
                                     <label for="floatingTextarea" class="form-label">Job Responsibilities</label>
                                     <div class="form-floating">
-                                        <textarea class="form-control" name="job_responsibilities" id="responsibilities" required>Responsibilities
-                            </textarea>
+                                        <textarea class="form-control" name="job_responsibilities" id="responsibilities" required>{{ old('job_responsibilities') }}</textarea>
+
                                     </div>
+                                    @if ($errors->has('job_responsibilities'))
+                                        <span class="text-danger">{{ $errors->first('job_responsibilities') }}</span>
+                                    @endif
                                     <div class="form-text">275 characters left</div>
                                 </div>
                             </div>
@@ -122,9 +146,11 @@
                                 <div class="form-group mx-md-4">
                                     <label for="floatingTextarea" class="form-label">Job Requirement & Skills</label>
                                     <div class="form-floating">
-                                        <textarea class="form-control" name="job_requirements_skills" id="requiredSkills" required>Job Requirement & Skills
-                            </textarea>
+                                        <textarea class="form-control" name="job_requirements_skills" id="requiredSkills" required>{{ old('job_requirements_skills') }}</textarea>
                                     </div>
+                                    @if ($errors->has('job_requirements_skills'))
+                                        <span class="text-danger">{{ $errors->first('job_requirements_skills') }}</span>
+                                    @endif
                                     <div class="form-text">275 characters left</div>
                                 </div>
                             </div>
@@ -134,9 +160,11 @@
                                 <div class="form-group mx-md-4">
                                     <label for="floatingTextarea" class="form-label">Employment Benefits</label>
                                     <div class="form-floating">
-                                        <textarea class="form-control" name="employment_benefits" id="benifits" required>Employment Benefits
-                            </textarea>
+                                        <textarea class="form-control" name="employment_benefits" id="benifits" required>{{ old('employment_benefits') }}</textarea>
                                     </div>
+                                    @if ($errors->has('employment_benefits'))
+                                        <span class="text-danger">{{ $errors->first('employment_benefits') }}</span>
+                                    @endif
                                     <div class="form-text">275 characters left</div>
                                 </div>
                             </div>
@@ -151,12 +179,18 @@
                                 </svg>
                                 <select class="form-select" aria-label="Default select example" name="job_location"
                                     required id="countries">
+                                    <option value="" selected> Select Country</option>
                                     @foreach ($countries as $country)
-                                        <option value="{{ $country->countries_iso_code }}" data-capital="Capital">
+                                        <option value="{{ $country->countries_iso_code }}"
+                                            {{ old('job_location') == $country->countries_iso_code ? 'selected' : '' }}
+                                            data-capital="Capital">
                                             {{ $country->countries_name }}
                                         </option>
                                     @endforeach
                                 </select>
+                                @if ($errors->has('job_location'))
+                                    <span class="text-danger">{{ $errors->first('job_location') }}</span>
+                                @endif
                             </div>
                         </div>
                     </div>
@@ -171,15 +205,22 @@
                                 <div class="form-group ms-md-4">
                                     <label for="CompanyIndustry" class="form-label">Company industry</label>
                                     <input type="text" placeholder="Education Management" class="form-control"
-                                        name="company_industry" id="CompanyIndustry"
-                                        aria-describedby="CompanyIndustry" />
+                                        name="company_industry" id="CompanyIndustry" aria-describedby="CompanyIndustry"
+                                        value="{{ old('company_industry') }}" />
+                                    @if ($errors->has('company_industry'))
+                                        <span class="text-danger">{{ $errors->first('company_industry') }}</span>
+                                    @endif
                                 </div>
                             </div>
                             <div class="col-md-6">
                                 <div class="form-group me-md-4">
                                     <label for="jobFunction" class="form-label">Job function</label>
                                     <input type="text" placeholder="Job function" class="form-control"
-                                        name="job_function" id="jobFunction" aria-describedby="jobFunction" />
+                                        name="job_function" id="jobFunction" aria-describedby="jobFunction"
+                                        value="{{ old('job_function') }}" />
+                                    @if ($errors->has('job_function'))
+                                        <span class="text-danger">{{ $errors->first('job_function') }}</span>
+                                    @endif
                                 </div>
                             </div>
                         </div>
@@ -196,6 +237,9 @@
                                 <input class="form-check-input" type="checkbox" role="switch" name="salary_duration"
                                     id="flexSwitchCheckChecked" checked />
                                 <label class="form-check-label" for="flexSwitchCheckChecked">Yearly</label>
+                                @if ($errors->has('salary_duration'))
+                                    <span class="text-danger">{{ $errors->first('salary_duration') }}</span>
+                                @endif
                             </div>
                         </div>
                         <div class="row">
@@ -203,15 +247,23 @@
                                 <div class="form-group ms-md-4">
                                     <label for="FullTime" class="form-label">Employment type</label>
                                     <input type="text" placeholder="Full Time" class="form-control"
-                                        id="employmentType" name="employment_type" aria-describedby="FullTime" />
+                                        id="employmentType" name="employment_type" aria-describedby="FullTime"
+                                        value="{{ old('employment_type') }}" />
                                 </div>
+                                @if ($errors->has('employment_type'))
+                                    <span class="text-danger">{{ $errors->first('employment_type') }}</span>
+                                @endif
                             </div>
                             <div class="col-md-7 col-lg-6">
                                 <div class="form-group me-md-4">
                                     <label for="writeHere" class="form-label">Specialized or Experience Area</label>
                                     <input type="text" placeholder="Write Here" class="form-control"
-                                        name="specialization" id="specialization" aria-describedby="writeHere" />
+                                        name="specialization" id="specialization" aria-describedby="writeHere"
+                                        value="{{ old('specialization') }}" />
                                 </div>
+                                @if ($errors->has('specialization'))
+                                    <span class="text-danger">{{ $errors->first('specialization') }}</span>
+                                @endif
                             </div>
                         </div>
                     </div>
@@ -226,27 +278,40 @@
                                 <div class="form-group ms-md-4">
                                     <label for="FromToFirst" class="form-label">Minimum</label>
                                     <input type="text" placeholder="Minimum" class="form-control" name="min_salary"
-                                        id="min_salary" aria-describedby="FromToFirst" />
+                                        id="min_salary" aria-describedby="FromToFirst"
+                                        value="{{ old('min_salary') }}" />
+                                    @if ($errors->has('min_salary'))
+                                        <span class="text-danger">{{ $errors->first('min_salary') }}</span>
+                                    @endif
                                 </div>
+
                             </div>
                             <div class="col-md-6 col-lg-3">
                                 <div class="form-group me-md-4 me-lg-0">
                                     <label for="FromToLast" class="form-label">Maximum</label>
                                     <input type="text" placeholder="Maximum" class="form-control" name="max_salary"
-                                        id="max_salary" aria-describedby="FromToLast" />
+                                        id="max_salary" aria-describedby="FromToLast" value="{{ old('max_salary') }}" />
+                                    @if ($errors->has('max_salary'))
+                                        <span class="text-danger">{{ $errors->first('max_salary') }}</span>
+                                    @endif
                                 </div>
+
                             </div>
                             <div class="col-md-12 col-lg-6">
                                 <div class="form-group me-md-4 ms-md-4 ms-lg-0">
                                     <label class="form-label" for="Currency">Currency</label>
                                     <select class="form-select" id="currency" name="currency"
-                                        aria-label="Default select example">
+                                        aria-label="Default select example" value="{{ old('currency') }}">
                                         <option value="" selected>Select Currency</option>
                                         @foreach ($currencies as $currency)
-                                            <option value="{{ $currency->id }}">
+                                            <option value="{{ $currency->id }}"
+                                                {{ old('currency') == $currency->id ? 'selected' : '' }}>
                                                 {{ $currency->name }}({{ $currency->code }})</option>
                                         @endforeach
                                     </select>
+                                    @if ($errors->has('currency'))
+                                        <span class="text-danger">{{ $errors->first('currency') }}</span>
+                                    @endif
                                 </div>
                             </div>
                         </div>
@@ -254,12 +319,16 @@
                             <div class="col-md-12">
                                 <div class="form-check form-switch ms-md-4">
                                     <input class="form-check-input me-2" type="checkbox" role="switch"
-                                        name="company_info_visibility" id="flex2SwitchCheckChecked" checked />
+                                        name="company_info_visibility" id="flex2SwitchCheckChecked" checked
+                                        value="{{ old('company_info_visibility') }}" />
                                     <span class="d-block">Hide Company Information</span>
                                     <label class="form-check-label ps-1" for="flex2SwitchCheckChecked">I’m open and
                                         available for
                                         freelance work.</label>
                                 </div>
+                                @if ($errors->has('company_info_visibility'))
+                                    <span class="text-danger">{{ $errors->first('company_info_visibility') }}</span>
+                                @endif
                             </div>
                         </div>
                         <div class="row">
@@ -267,7 +336,11 @@
                                 <div class="form-group mx-md-4">
                                     <label class="form-label" for="CompanyName">Alternative Company Name</label>
                                     <input type="text" class="form-control" id="alternative_company_name"
-                                        aria-describedby="jobTitle" name="alternative_company_name" />
+                                        aria-describedby="jobTitle" name="alternative_company_name"
+                                        value="{{ old('alternative_company_name') }}" />
+                                    @if ($errors->has('alternative_company_name'))
+                                        <span class="text-danger">{{ $errors->first('alternative_company_name') }}</span>
+                                    @endif
 
                                 </div>
                             </div>
@@ -302,34 +375,51 @@
                         <div class="form-group me-md-4">
                             <label class="form-label" for="IndustryExpert">Business Area</label>
                             <select class="form-select" id="IndustryExpert" name="business_area"
-                                aria-label="Default select example">
+                                aria-label="Default select example" value="{{ old('business_area') }}">
                                 @foreach ($jobCategories as $category)
-                                    <option value="{{ $category->id }}" selected>{{ $category->name }}</option>
+                                    <option value="{{ $category->id }}"
+                                        {{ old('business_area') == $category->id ? 'selected' : '' }}>
+                                        {{ $category->name }}
+                                    </option>
                                 @endforeach
 
                             </select>
+                            @if ($errors->has('business_area'))
+                                <span class="text-danger">{{ $errors->first('business_area') }}</span>
+                            @endif
                         </div>
                     </div>
                     <div class="col-md-12">
                         <div class="form-group me-md-4">
                             <label for="skillOne" class="form-label">Educational Requirements</label>
                             <input type="text" class="form-control" id="educational_requirements"
-                                name="educational_requirements" aria-describedby="skillOne" />
+                                name="educational_requirements" aria-describedby="skillOne"
+                                value="{{ old('educational_requirements') }}" />
+                            @if ($errors->has('educational_requirements'))
+                                <span class="text-danger">{{ $errors->first('educational_requirements') }}</span>
+                            @endif
                         </div>
                     </div>
                     <div class="col-md-12">
                         <div class="form-group me-md-4">
                             <label for="skillOne" class="form-label">Major / Concentration Subject</label>
                             <input type="text" class="form-control" id="skillOne" name="major_concentration_subject"
-                                aria-describedby="skillOne" />
+                                aria-describedby="skillOne" value="{{ old('major_concentration_subject') }}" />
+                            @if ($errors->has('major_concentration_subject'))
+                                <span class="text-danger">{{ $errors->first('major_concentration_subject') }}</span>
+                            @endif
                         </div>
                     </div>
                     <div class="col-md-12">
                         <div class="form-group me-md-4">
                             <label for="floatingTextarea" class="form-label">Additional Academic Requirement</label>
                             <div class="form-floating">
-                                <textarea class="form-control" name="additional_academic_requirement" id="floatingTextarea">Additional Academic Requirement
-                          </textarea>
+                                <textarea class="form-control" name="additional_academic_requirement" id="floatingTextarea">
+                                    {{ old('additional_academic_requirement') }}</textarea>
+                                @if ($errors->has('additional_academic_requirement'))
+                                    <span
+                                        class="text-danger">{{ $errors->first('additional_academic_requirement') }}</span>
+                                @endif
                             </div>
                             <div class="form-text">275 characters left</div>
                         </div>
@@ -340,16 +430,23 @@
                                 Workstation</label>
                             <select class="form-select" id="workplace" name="workplace"
                                 aria-label="Default select example">
-                                <option value="1">On-Site/Physical</option>
-                                <option value="2">Remote</option>
+                                <option value="1" {{ old('workplace') == 1 ? 'selected' : '' }}>On-Site/Physical
+                                </option>
+                                <option value="2" {{ old('workplace') == 2 ? 'selected' : '' }}>Remote</option>
                             </select>
+                            @if ($errors->has('workplace'))
+                                <span class="text-danger">{{ $errors->first('workplace') }}</span>
+                            @endif
                         </div>
                     </div>
                     <div class="col-md-6">
                         <div class="form-group me-md-4">
                             <label class="form-label" for="Nationality">Nationality</label>
                             <input type="text" class="form-control" id="nationality" name="nationality"
-                                aria-describedby="skillOne" />
+                                aria-describedby="skillOne" value="{{ old('nationality') }}" />
+                            @if ($errors->has('nationality'))
+                                <span class="text-danger">{{ $errors->first('nationality') }}</span>
+                            @endif
                         </div>
                     </div>
                     <div class="col-md-6">
@@ -357,10 +454,13 @@
                             <label class="form-label" for="Gender">Gender</label>
                             <select class="form-select" name="gender" id="gender"
                                 aria-label="Default select example">
-                                <option value="1">Male</option>
-                                <option value="2">Female</option>
-                                <option value="3">Both</option>
+                                <option value="1" {{ old('gender') == 1 ? 'selected' : '' }}>Male</option>
+                                <option value="2" {{ old('gender') == 2 ? 'selected' : '' }}>Female</option>
+                                <option value="3" {{ old('gender') == 3 ? 'selected' : '' }}>Both</option>
                             </select>
+                            @if ($errors->has('gender'))
+                                <span class="text-danger">{{ $errors->first('gender') }}</span>
+                            @endif
                         </div>
                     </div>
                     <div class="col-md-6">
@@ -369,11 +469,20 @@
                             <div class="d-flex gap-3">
 
                                 <input type="number" placeholder="18" class="form-control" name="min_age"
-                                    id="min_age" aria-describedby="min_age" />
+                                    id="min_age" aria-describedby="min_age" value="{{ old('min_age') }}" />
+
 
                                 <input type="number" placeholder="59" class="form-control" name="max_age"
-                                    id="max_age" aria-describedby="max_age" />
+                                    id="max_age" aria-describedby="max_age" value="{{ old('max_age') }}" />
+
                             </div>
+                            @if ($errors->has('min_age'))
+                                <span class="text-danger">{{ $errors->first('min_age') }}</span>
+                            @endif
+                            @if ($errors->has('max_age'))
+                                <br>
+                                <span class="text-danger">{{ $errors->first('max_age') }}</span>
+                            @endif
                         </div>
                     </div>
                     <div class="col-md-12">
@@ -381,14 +490,21 @@
                             <label for="Certifications" class="form-label">Training &
                                 Certification</label>
                             <input type="text" class="form-control" name="training_certification"
-                                id="training_certification" aria-describedby="Certifications" />
+                                id="training_certification" aria-describedby="Certifications"
+                                value="{{ old('training_certification') }}" />
+                            @if ($errors->has('training_certification'))
+                                <span class="text-danger">{{ $errors->first('training_certification') }}</span>
+                            @endif
                         </div>
                     </div>
                     <div class="col-md-12">
                         <div class="form-group me-md-4">
                             <label for="Specialities" class="form-label">Specialties</label>
                             <input type="text" class="form-control" name="specialties" id="Specialities"
-                                aria-describedby="Specialities" />
+                                aria-describedby="Specialities" value="{{ old('specialties') }}" />
+                            @if ($errors->has('specialties'))
+                                <span class="text-danger">{{ $errors->first('specialties') }}</span>
+                            @endif
                         </div>
                     </div>
                 </div>
@@ -533,30 +649,35 @@
                     </div>
                     <div class="button-end">
                         <!-- <button type="button" class="btn-default">
-                                      Ready To Publish
-                                  </button> -->
+                                                                                                                                                                                                                                                                                                                                                                                                                                  Ready To Publish
+                                                                                                                                                                                                                                                                                                                                                                                                                              </button> -->
                         <div class="row">
                             <div class="col-xl-10">
                                 <div class="form-datePicker-wrapper">
                                     <div class="form-datePicker">
                                         <div class="form-group">
-                                            <input class="form-control" type="date" id="timeFramTo" />
+                                            <input class="form-control" value="" type="date"
+                                                id="publish_date_preview" />
                                         </div>
                                         <span>To</span>
                                         <div class="form-group">
-                                            <input class="form-control" type="date" id="timeFramFrom" />
+                                            <input class="form-control" value="" type="date"
+                                                id="deadline_preview" />
                                         </div>
                                     </div>
-                                    <button type="button" class="btn-form btn-form-continue me-0">
+                                    <button type="button" id="schedule_for_later"
+                                        class="btn-form btn-form-continue me-0"
+                                        onclick="submitForm('schedule_for_later')">
                                         Schedule For Later
                                     </button>
                                 </div>
                             </div>
                             <div class="col-xl-2">
-                                <button type="button" class="btn-default" data-bs-toggle="modal"
-                                    data-bs-target="#exampleModal">
+                                <button type="button" id="publish_now" class="btn-form btn-form-continue me-0"
+                                    onclick="submitForm('publish_now')">
                                     Publish Now
                                 </button>
+
                             </div>
                         </div>
                     </div>
