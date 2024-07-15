@@ -28,7 +28,7 @@ Route::middleware(['guest:recruiter'])->group(function () {
     Route::get('/recruiter/register', [RecruiterAuthController::class, 'showRegistrationForm'])->name('recruiter.register');
     Route::get('/recruiter/register/get-otp', [RecruiterAuthController::class, 'getOTPVerification'])->name('recruiter.register.getotp');
     Route::post('/recruiter/register/mail-verification', [RecruiterAuthController::class, 'mailVerification'])->name('recruiter.register.mail.verification');
-    Route::post('/recruiter/register', [RecruiterAuthController::class, 'register'])->name('recruiter.register');
+    Route::post('/recruiter/register', [RecruiterAuthController::class, 'register'])->name('recruiter.register.post');
     
     Route::get('/recruiter/reset-password', [RecruiterAuthController::class, 'getResetPassword'])->name('recruiter.reset.password');
     Route::post('/recruiter/reset-password/send-otp', [RecruiterAuthController::class, 'resetPasswordSendOTP'])->name('recruiter.reset.password.send.otp');
@@ -63,7 +63,7 @@ Route::middleware(['guest:recruiter'])->group(function () {
 Route::middleware(['auth:recruiter'])->group(function () {
     // Recruiter dashboard or other authenticated routes
     Route::get('/recruiter/dashboard', [DashboardController::class, 'index'])->name('recruiter.dashboard');
-    Route::get('/create-new-job', [JobCircularController::class, 'index'])->name('create.new.job');
+    Route::get('/create-new-job', [JobCircularController::class, 'index'])->name('create.new.job.get');
     Route::post('/create-new-job', [JobCircularController::class, 'postCreateNewJob'])->name('create.new.job');
     
     // All Jobs
@@ -174,9 +174,9 @@ Route::post('/fetch-job-details', [JobCircularController::class, 'fetchJobDetail
 ===================================*/
 Route::middleware(['guest:admin'])->group(function () {
     Route::get('/admin/login', [AdminAuthController::class, 'showLoginForm'])->name('admin.login');
-    Route::post('/admin/login', [AdminAuthController::class, 'login'])->name('admin.login');
+    Route::post('/admin/login', [AdminAuthController::class, 'login'])->name('admin.login.post');
     Route::get('/admin/register', [AdminAuthController::class, 'showRegistrationForm'])->name('admin.register');
-    Route::post('/admin/register', [AdminAuthController::class, 'register'])->name('admin.register');
+    Route::post('/admin/register', [AdminAuthController::class, 'register'])->name('admin.register.post');
 });
 
 Route::middleware(['auth:admin'])->group(function () {
@@ -193,9 +193,9 @@ Route::middleware(['auth:admin'])->group(function () {
 ===================================*/
 Route::middleware(['guest:job_seeker'])->group(function () {
     Route::get('/job_seeker/login', [JobSeekerAuthController::class, 'showLoginForm'])->name('job_seeker.login');
-    Route::post('/job_seeker/login', [JobSeekerAuthController::class, 'login'])->name('job_seeker.login');
+    Route::post('/job_seeker/login', [JobSeekerAuthController::class, 'login'])->name('job_seeker.login.post');
     Route::get('/job_seeker/register', [JobSeekerAuthController::class, 'showRegistrationForm'])->name('job_seeker.register');
-    Route::post('/job_seeker/register', [JobSeekerAuthController::class, 'register'])->name('job_seeker.register');
+    Route::post('/job_seeker/register', [JobSeekerAuthController::class, 'register'])->name('job_seeker.register.post');
 });
 
 Route::middleware(['auth:job_seeker'])->group(function () {

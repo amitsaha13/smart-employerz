@@ -10,7 +10,6 @@ class JobApplication extends Model
     use HasFactory;
 
     protected $table = 'job_applications';
-
     /**
      * Get the job that owns the job application.
      */

@@ -1,15 +1,17 @@
 <?php
 namespace App\Http\Controllers\Recruiter;
+require_once app_path('CommonImports.php');
 
 use App\Http\Controllers\Controller;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 use App\Models\JobSeeker;
-use App\Models\Recruiter\Job;
+use App\Models\Job;
+use App\Models\DraftJob;
 use App\Models\Admin\JobCategory;
 use App\Models\Admin\JobLevel;
 use App\Models\Admin\Currency;
 use App\Models\Admin\CompensationAndBenefit;
-use App\Models\Recruiter\DraftJob;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
@@ -19,7 +21,6 @@ use App\Mail\SendOTPMail;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\Http;
-
 
 class JobCircularController extends Controller
 {
@@ -204,100 +205,125 @@ class JobCircularController extends Controller
 
     public function postCreateNewJob(Request $request)
     {
-        // try {
+        try {
             // Define custom validation messages
-            $messages = [
+            $VALIDATION_MESSAGES = [
                 'required' => 'The :attribute field is required.',
                 'string' => 'The :attribute must be a string.',
                 'numeric' => 'The :attribute must be a number.',
                 'gte' => 'The :attribute must be greater than or equal to :value.',
             ];
 
+            // Get the Job Type (Draft, Scheduled or Publishing Now)
+            // If NULL consider it as Draft job
+            $jobType = $request->jobType;
+
+            $JOB_POSTING_RULES = [
+                'job_title' => 'required|string',
+                'job_level' => 'required|string',
+                'min_experience' => 'required|numeric',
+                'max_experience' => 'required|numeric|gte:min_experience',
+                'job_description' => 'required|string',
+                'job_responsibilities' => 'required|string',
+                'job_requirements_skills' => 'required|string',
+                'employment_benefits' => 'required|string'
+            ];
+
+            if ($jobType) {
+                $additional_rules = [
+                    'job_location' => 'required|string',
+                    'company_industry' => 'required|string',
+                    'job_function' => 'required|string',
+                    'salary_duration' => 'required|string',
+                    'employment_type' => 'required|string',
+                    'specialization' => 'required|string',
+                    'min_salary' => 'required|numeric',
+                    'max_salary' => 'required|numeric|gte:min_salary',
+                    'currency' => 'required|string',
+                    'business_area' => 'nullable|string',
+                    'educational_requirements' => 'required|string',
+                    'major_concentration_subject' => 'required|string',
+                    'additional_academic_requirement' => 'required|string',
+                    'workplace' => 'required|string',
+                    'nationality' => 'required|string',
+                    'gender' => 'required|string',
+                    'min_age' => 'required|numeric',
+                    'max_age' => 'required|numeric|gte:min_age',
+                    'deadline' => 'required|date',
+                ];
+
+                if ($jobType == 'schedule_for_later') {
+                    $additional_rules['publish_date'] = 'required|date';
+                }
+
+                $JOB_POSTING_RULES = array_merge($JOB_POSTING_RULES, $additional_rules);
+            }
+
             // Validate the request data
-            // $validator = Validator::make($request->all(), [
-            //     'job_title' => 'required|string',
-            //     'job_level' => 'required|string',
-            //     'min_experience' => 'required|numeric',
-            //     'max_experience' => 'required|numeric|gte:min_experience',
-            //     'job_description' => 'required|string',
-            //     'job_responsibilities' => 'required|string',
-            //     'job_requirements_skills' => 'required|string',
-            //     'employment_benefits' => 'required|string',
-            //     'job_location' => 'required|string',
-            //     'company_industry' => 'required|string',
-            //     'job_function' => 'required|string',
-            //     'salary_duration' => 'required|string',
-            //     'employment_type' => 'required|string',
-            //     'specialization' => 'required|string',
-            //     'min_salary' => 'required|numeric',
-            //     'max_salary' => 'required|numeric|gte:min_salary',
-            //     'currency' => 'required|string',
-            //     'company_info_visibility' => 'required|string',
-            //     'business_area' => 'nullable|string',
-            //     'educational_requirements' => 'required|string',
-            //     'level_of_education' => 'required|string',
-            //     'degree' => 'required|string',
-            //     'workplace' => 'required|string',
-            //     'nationality' => 'required|string',
-            //     'gender' => 'required|string',
-            //     'min_age' => 'required|numeric',
-            //     'max_age' => 'required|numeric|gte:min_age',
-            // ], $messages);
+            $validator = Validator::make($request->all(), $JOB_POSTING_RULES, $VALIDATION_MESSAGES);
 
             // If validation fails, throw a ValidationException
-            // if ($validator->fails()) {
-            //     return redirect()->back();
-            // }
-            
+            if ($validator->fails()) {
+                return redirect()
+                    ->back()
+                    ->withErrors($validator)
+                    ->withInput()
+                    ->with('error', 'Please fill up properly');
+            }
 
-            // Your existing code to create and save the job instance
+            // Create and save the job instance
             $recruiter = Auth::guard('recruiter')->user();
-            $job = new DraftJob();
+            $job = $jobType ? new Job() : new DraftJob();
+
             // Set each attribute on the job instance
-            $job->recruiter_id = $recruiter->id;
-            $job->job_title = $request->input('job_title');
-            $job->job_level = $request->input('job_level');
-            $job->min_experience = min($request->input('min_experience'), $request->input('max_experience'));
-            $job->max_experience = max($request->input('min_experience'), $request->input('max_experience'));
-            $job->job_description = $request->input('job_description');
-            $job->job_responsibilities = $request->input('job_responsibilities');
-            $job->job_requirements_skills = $request->input('job_requirements_skills');
-            $job->employment_benefits = $request->input('employment_benefits');
-            $job->job_location = $request->input('job_location');
-            $job->company_industry = $request->input('company_industry');
-            $job->job_function = $request->input('job_function');
-            $job->salary_duration = $request->input('salary_duration') == 'on' ? 1 : 0;
-            $job->employment_type = $request->input('employment_type');
-            $job->specialization = $request->input('specialization');
-            $job->min_salary = min($request->input('min_salary'), $request->input('max_salary'));
-            $job->max_salary = max($request->input('min_salary'), $request->input('max_salary'));
-            $job->currency = $request->input('currency');
-            $job->company_info_visibility = $request->input('company_info_visibility') == 'on' ? 1 : 0;
-            $job->alternative_company_name = $request->input('alternative_company_name');
-            $job->business_area = $request->input('business_area');
-            $job->educational_requirements = $request->input('educational_requirements');
-            $job->level_of_education = $request->input('level_of_education');
-            $job->degree = $request->input('degree');
-            $job->major_concentration_subject = $request->input('major_concentration_subject');
-            $job->additional_academic_requirement = $request->input('additional_academic_requirement');
-            $job->workplace = $request->input('workplace');
-            $job->nationality = $request->input('nationality');
-            $job->gender = $request->input('gender');
-            $job->min_age = min($request->input('min_age'), $request->input('max_age'));
-            $job->max_age = max($request->input('min_age'), $request->input('max_age'));
-            $job->training_certification = $request->input('training_certification');
-            $job->specialties = $request->input('specialties');
-            $job->status = 1;
+            $job->recruiter_id                      = $recruiter->id;
+            $job->job_title                         = $request->input('job_title');
+            $job->job_level                         = $request->input('job_level');
+            $job->min_experience                    = min($request->input('min_experience'), $request->input('max_experience'));
+            $job->max_experience                    = max($request->input('min_experience'), $request->input('max_experience'));
+            $job->job_description                   = $request->input('job_description');
+            $job->job_responsibilities              = $request->input('job_responsibilities');
+            $job->job_requirements_skills           = $request->input('job_requirements_skills');
+            $job->employment_benefits               = $request->input('employment_benefits');
+            $job->job_location                      = $request->input('job_location');
+            $job->company_industry                  = $request->input('company_industry');
+            $job->job_function                      = $request->input('job_function');
+            $job->salary_duration                   = $request->input('salary_duration') == 'on' ? 1 : 0;
+            $job->employment_type                   = $request->input('employment_type');
+            $job->specialization                    = $request->input('specialization');
+            $job->min_salary                        = min($request->input('min_salary'), $request->input('max_salary'));
+            $job->max_salary                        = max($request->input('min_salary'), $request->input('max_salary'));
+            $job->currency                          = $request->input('currency');
+            $job->company_info_visibility           = $request->input('company_info_visibility') == 'on' ? 1 : 0;
+            $job->alternative_company_name          = $request->input('alternative_company_name');
+            $job->business_area                     = $request->input('business_area');
+            $job->educational_requirements          = $request->input('educational_requirements');
+            $job->level_of_education                = $request->input('level_of_education');
+            $job->degree                            = $request->input('degree');
+            $job->major_concentration_subject       = $request->input('major_concentration_subject');
+            $job->additional_academic_requirement   = $request->input('additional_academic_requirement');
+            $job->workplace                         = $request->input('workplace');
+            $job->nationality                       = $request->input('nationality');
+            $job->gender                            = $request->input('gender');
+            $job->min_age                           = min($request->input('min_age'), $request->input('max_age'));
+            $job->max_age                           = max($request->input('min_age'), $request->input('max_age'));
+            $job->training_certification            = $request->input('training_certification');
+            $job->specialties                       = $request->input('specialties');
+            $job->publish_date                      = $jobType ? ($jobType == 'schedule_for_later' ? $request->input('publish_date') : Carbon::now()) : null;
+            $job->deadline                          = $request->input('deadline');
+            $job->status                            = 1; // Auto Active
 
             // Save the job data to the database
             $job->save();
 
-            return redirect()->back();
-        // }
-        //  catch (\Exception $e) {
-        //     \Log::error('Error in JobCircularController[postCreateNewJob]: ' . $e->getMessage());
-        //     return redirect()->back()->withErrors()->withInput();
-        // }
+            $successMessage = $jobType ? ($jobType == 'schedule_for_later' ? 'Successfully Scheduled for Later' : 'Job Published Successfully') : 'Job Saved As Draft';
+
+            return redirect()->back()->with('success', $successMessage);
+        }
+         catch (\Throwable $th) {
+            LogErrors($th);
+            return view('400');
+        }
     }
 
 
