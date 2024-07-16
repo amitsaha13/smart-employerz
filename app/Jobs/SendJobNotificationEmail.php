@@ -26,7 +26,8 @@ class SendJobNotificationEmail implements ShouldQueue
     public function handle()
     {
         try {
-            Mail::to($this->candidateData->email)->send(new JobNotification($this->candidateData, $this->jobData));
+            Mail::to($this->candidateData->email)
+                ->send(new JobNotification($this->candidateData, $this->jobData));
         } catch (\Throwable $th) {
             LogErrors($th);
         }

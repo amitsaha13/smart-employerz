@@ -311,9 +311,8 @@ class JobCircularController extends Controller
             $job->specialties                       = $request->input('specialties');
             $job->publish_date                      = $jobType ? ($jobType == 'schedule_for_later' ? $request->input('publish_date') : Carbon::now()) : null;
             $job->deadline                          = $request->input('deadline');
-            $job->status                            = 1; // Auto Active
+            $job->status                            = $jobType == 'schedule_for_later' ? 0 : 1; // Auto Active
 
-            // Save the job data to the database
             $job->save();
 
             $successMessage = $jobType ? ($jobType == 'schedule_for_later' ? 'Successfully Scheduled for Later' : 'Job Published Successfully') : 'Job Saved As Draft';
